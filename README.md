@@ -39,7 +39,7 @@ flowchart TB
     data[(src/config/academy.ts<br/>all club data)]
   end
   subgraph Actions["GitHub Actions"]
-    build[npm ci + astro check + astro build<br/>BASE_PATH=/club_hikawa]
+    build[npm audit + Playwright tests<br/>astro check + astro build<br/>BASE_PATH=/club_hikawa]
   end
   subgraph Pages["GitHub Pages (free)"]
     site[Static files: HTML, CSS, JS,<br/>WebP frames, MP4 clips]
@@ -98,6 +98,7 @@ sequenceDiagram
 
   Dev->>GH: git push (main)
   GH->>GA: deploy-pages.yml
+  GA->>GA: npm audit, Playwright tests (desktop + mobile)
   GA->>GA: configure-pages gives origin and /club_hikawa
   GA->>GA: npm ci, astro check, astro build
   GA->>P: upload dist/ and deploy
@@ -137,10 +138,14 @@ sequenceDiagram
 │   ├── video/, posters/        Looping MP4 clips and their WebP posters
 │   └── assets/                 Logo in several sizes
 │
-├── scripts/extract-frames.mjs  Extracts the frame sequence from a video through Edge or Chrome (no ffmpeg)
+├── scripts/
+│   ├── extract-frames.mjs      Extracts the frame sequence from a video through Edge or Chrome (no ffmpeg)
+│   └── serve-dist.mjs          Serves dist/ under the sub-path for the tests
+├── tests/                      Playwright end-to-end tests (pages, links, form, security, content)
+├── playwright.config.ts        Desktop and mobile projects; builds and serves the site before testing
 ├── docs/legal/                 Enrolment form template: consent, data and image authorizations
 ├── .github/workflows/
-│   └── deploy-pages.yml        Build and deploy to GitHub Pages on every push to main
+│   └── deploy-pages.yml        Audit, test, then build and deploy to GitHub Pages
 ├── astro.config.mjs            Static output; site and base come from the environment
 └── package.json                Scripts and dependencies (Node 22.23.4 or later)
 ```
@@ -185,6 +190,7 @@ Other features:
 | Vanilla CSS with custom properties | Design tokens and component styles | No UI framework needed for a content site |
 | @fontsource Bebas Neue and Inter (variable) | Display and text fonts, self-hosted | No requests to Google Fonts, so no third-party tracking |
 | WebP frames and MP4 clips | Hero sequence and section clips | Small files; the throw is drawn frame by frame on a canvas |
+| Playwright | End-to-end tests on desktop and mobile | Tests the real built site in a real browser |
 | GitHub Actions + GitHub Pages | Build and hosting | Free for public repos, HTTPS included, custom domain supported |
 
 ## Club data
@@ -232,9 +238,13 @@ Before relying on these documents, the club should:
 | No attack surface | No server code, database, login or file upload; GitHub Pages serves static files over HTTPS |
 | No personal data on the site | The form keeps nothing; data leaves the device only when the visitor sends the WhatsApp message |
 | No tracking | No cookies, no localStorage, no analytics, no third-party fonts or scripts |
-| External links | Open with `rel="noopener"` |
+| No XSS sinks | Form input reaches the page only through `textContent`; `innerHTML` is only ever cleared. The one `set:html` (belt data in `Grades.astro`) is static JSON with `<` escaped. Tests type an HTML payload into the form and assert nothing executes |
+| Safe redirects | Old home anchors redirect only when the hash is in a fixed allowlist; tested with `javascript:` and path payloads |
+| External links | Open with `rel="noopener"`; a test fails on any `target="_blank"` link without it |
 | Secrets | None. The build needs no keys; the deploy uses GitHub's built-in OIDC token |
-| Supply chain | Dependencies pinned in `package-lock.json` and installed with `npm ci` |
+| CI permissions | Workflow default is `contents: read`; only the deploy job gets `pages: write` and `id-token: write`; checkout does not keep credentials |
+| Supply chain | Dependencies pinned in `package-lock.json` and installed with `npm ci`; `npm audit` (high and above) gates every run; GitHub Actions pinned to commit SHAs |
+| Review | Security review of the whole repository on 2026-10-28: no high or medium findings |
 
 ## Quality
 
@@ -242,9 +252,19 @@ Before relying on these documents, the club should:
 | --- | --- |
 | Type checking | `astro check` runs before every build, locally and in CI; a type error fails the deploy |
 | Build | `npm run build` must pass with 0 errors, 0 warnings, 0 hints |
-| Browser checks | Every page checked in a real browser at phone (375 px) and desktop widths: no 404s, no console errors, no horizontal scroll, fonts and media loaded, sub-path links resolved |
-| Design rules | Taste v2 "colour chapters" direction; tokens with checked contrast; no em or en dashes in site copy |
-| Automated tests | None yet (see next steps) |
+| End-to-end tests | 58 Playwright tests (29 per device) on desktop Chrome and a Pixel 7 profile, against a production build served under `/club_hikawa/` exactly like GitHub Pages |
+| Continuous integration | `.github/workflows/deploy-pages.yml`: `npm audit`, then the full test suite on every push and pull request; the site is built and deployed only if every test passes |
+| Design rules | Taste v2 "colour chapters" direction; tokens with checked contrast; no em or en dashes in site copy (tested) |
+
+| Test file | What it proves |
+| --- | --- |
+| `tests/pages.spec.ts` | Every page returns 200 with no console errors, no failed files and no horizontal scroll after scrolling to the end; `lang`, title, one `h1`, description and absolute `og:image` |
+| `tests/links.spec.ts` | Every internal link, image, video, poster and stylesheet on every page resolves under the sub-path; hero frames exist |
+| `tests/form.spec.ts` | Required-field errors, focus on the first error, the WhatsApp URL and message, guardian confirmation for youth programs, email validation, HTML payloads never rendered, consent links to the policy |
+| `tests/security.spec.ts` | No third-party requests, no cookies or storage, no inline event handlers, external scripts, `javascript:` links or unsafe `_blank` links, hash-redirect allowlist, JSON data island can't break out |
+| `tests/content.spec.ts` | Contact details and map link, footer reaches both legal pages, required sections of the privacy policy and terms, no em or en dashes |
+
+The suite already caught one real bug: the guardian checkbox showed for every program because `.fld { display: flex }` overrode the `hidden` attribute.
 
 ### AI-assisted engineering
 
@@ -254,7 +274,7 @@ Before relying on these documents, the club should:
 | Impeccable, Taste skill | Design direction and audits |
 | BMad Method | Planning and review workflows |
 
-Agents draft plans, code and text. Changes are checked with the build and in the browser before commit, and approved by a person.
+Agents draft plans, code and text. Changes are checked with the build, the test suite and in the browser before commit, and approved by a person.
 
 ## Decisions and tradeoffs
 
@@ -290,6 +310,8 @@ Open http://localhost:4321. Locally the site runs at the root (`/`), not under `
 | `npm run check` | TypeScript and Astro checks |
 | `npm run build` | `astro check` then production build to `dist/` |
 | `npm run preview` | Serve `dist/` locally |
+| `npm run test:e2e` | Build under `/club_hikawa`, serve it locally and run every Playwright test (first time: `npx playwright install chromium`) |
+| `npm run serve:dist` | Serve `dist/` under `BASE_PATH`, like GitHub Pages |
 | `npm run frames` | Re-extract the hero frames from `media-src/` (needs Edge or Chrome) |
 
 ## Environment variables
@@ -303,7 +325,7 @@ Both come from `actions/configure-pages` in the workflow. Locally both are unset
 
 ## Deployment
 
-Every push to `main` deploys automatically through [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml). To deploy by hand: **Actions → Deploy to GitHub Pages → Run workflow**.
+Every push to `main` runs `npm audit` and the full test suite, then deploys if everything passes, through [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml). Pull requests run the tests without deploying. To deploy by hand: **Actions → Test and deploy → Run workflow**.
 
 One-time setup (already done): **Settings → Pages → Source: GitHub Actions**.
 
@@ -318,7 +340,7 @@ One-time setup (already done): **Settings → Pages → Source: GitHub Actions**
 - **Legal review:** the privacy policy, terms and enrolment template need review by a Colombian lawyer.
 - **Sub-path URL:** the site lives at `github.io/club_hikawa/` until a custom domain is added.
 - **No security headers:** GitHub Pages can't set headers such as `Content-Security-Policy`; a domain behind a CDN (for example Cloudflare's free plan) would allow them.
-- **No automated tests:** add Playwright smoke tests (pages load, no 404s, form hand-off) to the workflow.
+- **Single browser engine in CI:** tests run on Chromium only; add WebKit to cover iPhone Safari.
 - **No 404 page:** add `src/pages/404.astro` with a link back home.
 
 ## License and credits

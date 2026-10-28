@@ -11,3 +11,8 @@ desktop.ini
 *.log
 .env
 .env.*
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/

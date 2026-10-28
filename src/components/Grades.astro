@@ -33,7 +33,7 @@ import { belts } from '../config/academy';
     ))}
   </fieldset>
   <p class="small soft grd__note">Colores kyu de uso habitual en clubes; pueden variar según la federación. Grados dan según el sistema Kodokan.</p>
-  <script type="application/json" data-belts-json set:html={JSON.stringify(belts)}></script>
+  <script type="application/json" data-belts-json set:html={JSON.stringify(belts).replace(/</g, '\\u003c')}></script>
 </section>
 
 <style>
