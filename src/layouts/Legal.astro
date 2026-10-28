@@ -1,0 +1,53 @@
+---
+// Shared shell for the legal pages: a black title field and a white reading column.
+import { withBase } from '../config/url';
+import { academy } from '../config/academy';
+import Base from './Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props { title: string; description: string; heading: string }
+const { title, description, heading } = Astro.props;
+---
+<Base title={`${title} · ${academy.name}`} description={description} ogTitle={title} ogDescription={description} heroPreload={false}>
+  <Header current="legal" />
+  <main>
+    <section class="lgl__head field f-black" aria-labelledby="legal-title">
+      <h1 id="legal-title" class="head">{heading}</h1>
+      <p class="small soft">Vigente desde el {academy.legal.policyDate}.</p>
+      <a class="text-link lgl__home" href={withBase('/')}>← Volver al inicio</a>
+    </section>
+    <article class="lgl field f-white">
+      <slot />
+    </article>
+  </main>
+  <Footer />
+</Base>
+
+<script>
+  import '../scripts/site';
+</script>
+
+<style>
+  .lgl__head { min-height: 0; display: flex; flex-direction: column; gap: 20px; align-items: flex-start; padding-top: calc(var(--header-h) + 64px); padding-bottom: 56px; }
+  .lgl__head .head { max-width: 16ch; }
+  .lgl__home { font-weight: 650; min-height: 44px; display: inline-flex; align-items: center; }
+  .lgl { min-height: 0; padding-top: 56px; color: var(--ink-on-light); }
+  .lgl > :global(*) { max-width: 72ch; }
+  .lgl :global(h2) { font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 1rem + 2vw, 44px); line-height: 1; margin: 56px 0 16px; scroll-margin-top: calc(var(--header-h) + 24px); }
+  .lgl :global(h2:first-child) { margin-top: 0; }
+  .lgl :global(h3) { font-weight: 650; font-size: var(--step-body); margin: 28px 0 8px; }
+  .lgl :global(p), .lgl :global(li) { font-size: var(--step-body); line-height: 1.6; }
+  .lgl :global(p + p) { margin-top: 12px; }
+  .lgl :global(ul), .lgl :global(ol) { padding-left: 1.3em; margin: 12px 0; display: flex; flex-direction: column; gap: 6px; }
+  .lgl :global(ul) { list-style: square; }
+  .lgl :global(ol) { list-style: decimal; }
+  .lgl :global(li::marker) { color: var(--red); }
+  .lgl :global(a:not(.btn)) { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; text-decoration-color: var(--red); }
+  .lgl :global(.lgl__box) { background: var(--tone-light); padding: 20px 24px; }
+  .lgl :global(.lgl__toc) { columns: 2 240px; gap: var(--gutter); display: block; }
+  .lgl :global(.lgl__toc li) { break-inside: avoid; margin-bottom: 6px; }
+  .lgl :global(dl) { display: grid; grid-template-columns: max-content 1fr; gap: 8px 20px; margin: 12px 0; }
+  .lgl :global(dt) { font-weight: 650; }
+  @media (max-width: 560px) { .lgl :global(dl) { grid-template-columns: 1fr; gap: 2px; } .lgl :global(dd) { margin-bottom: 10px; } }
+</style>

@@ -10,7 +10,8 @@ const nav = [[withBase('/#inicio'), 'Inicio'], [withBase('/el-judo/'), 'El judo'
     <img src={withBase('/assets/hikawa-logo-160.webp')} alt="Logo del Club Deportivo de Judo Hikawa" width="80" height="80" loading="lazy" />
     <p class="lead">Club Deportivo de Judo Hikawa. Judo, técnica y carácter.</p>
     <p class="small soft ftr__legal">
-      <a id="privacidad" href="#privacidad">POLÍTICA DE PRIVACIDAD [ENLACE POR DEFINIR]</a><br />
+      <a id="privacidad" href={withBase('/privacidad/')}>POLÍTICA DE PRIVACIDAD</a><br />
+      <a href={withBase('/terminos/')}>TÉRMINOS DE USO</a><br />
       © 2026 CLUB DEPORTIVO DE JUDO HIKAWA
     </p>
   </div>
@@ -21,6 +22,7 @@ const nav = [[withBase('/#inicio'), 'Inicio'], [withBase('/el-judo/'), 'El judo'
     <h3 class="name">Ubicación</h3>
     <p>{academy.address || <span class="pending">[Dirección del dojo]</span>}</p>
     <p>{academy.city || <span class="pending">[Ciudad]</span>}</p>
+    {academy.mapsUrl && <p><a class="text-link" href={academy.mapsUrl} target="_blank" rel="noopener">Ver en el mapa</a></p>}
   </div>
   <div class="ftr__tile f-graphite">
     <h3 class="name">Contacto</h3>

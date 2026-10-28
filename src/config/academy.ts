@@ -20,10 +20,13 @@ export const DAYS: Day[] = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
 
 export const academy = {
   name: 'Club Deportivo de Judo Hikawa',
-  whatsappNumber: '', // e.g. '573000000000' (digits with country code). Empty = WhatsApp CTA disabled.
+  whatsappNumber: '+57 315 2036137', // Shown as written; links use the digits only. Empty = WhatsApp CTA disabled.
   contactEmail: '',
-  address: '',
-  city: '',
+  address: 'Cl. 9c Bis #46-139',
+  city: 'Cali, Valle del Cauca',
+  mapsUrl: 'https://maps.app.goo.gl/wwWNhT8iPRPbXvrH7',
+  // Data controller details for the privacy policy (Ley 1581 de 2012). Empty = shown as pending.
+  legal: { nit: '', representative: '', policyDate: '28 de octubre de 2026' },
   socials: { instagram: '', facebook: '', tiktok: '' },
   firstClass: '', // 'Gratis' or a price
   whatToBring: '', // what to bring to the first class, in the club's words

@@ -2,7 +2,7 @@
 import { withBase } from '../config/url';
 // One set of labels everywhere: desktop, phone menu and footer. Links are absolute so they work from
 // every page; on the page that holds the target, site.ts turns them into smooth in-page scrolls.
-interface Props { current?: 'home' | 'judo' }
+interface Props { current?: 'home' | 'judo' | 'legal' }
 const { current = 'home' } = Astro.props;
 const nav = [[withBase('/#inicio'), 'Inicio'], [withBase('/el-judo/'), 'El judo', 'judo'], [withBase('/#programas'), 'Programas'], [withBase('/#informacion'), 'Información'], [withBase('/#preguntas'), 'Preguntas'], [withBase('/el-judo/#sensei'), 'Sensei']];
 const mobileNav = nav;

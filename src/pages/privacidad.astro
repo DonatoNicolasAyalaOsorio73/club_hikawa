@@ -1,0 +1,135 @@
+---
+import { withBase } from '../config/url';
+import { academy } from '../config/academy';
+import Legal from '../layouts/Legal.astro';
+
+const wa = academy.whatsappNumber;
+const waHref = `https://wa.me/${wa.replace(/\D/g, '')}`;
+const place = [academy.address, academy.city].filter(Boolean).join(', ');
+const pending = (label: string) => `[${label} POR CONFIRMAR]`;
+---
+<Legal
+  title="Política de tratamiento de datos"
+  heading="Política de tratamiento de datos personales"
+  description="Cómo trata el Club Deportivo de Judo Hikawa los datos personales, conforme a la Ley 1581 de 2012."
+>
+  <div class="lgl__box">
+    <h2 id="aviso">Aviso de privacidad</h2>
+    <p>{academy.name} es responsable de los datos personales que nos envías. Los usamos solo para responder tu solicitud, coordinar tu primera clase y, si te inscribes, gestionar tu participación en el club. No los vendemos ni los compartimos con fines publicitarios.</p>
+    <p>Puedes conocer, actualizar, rectificar y suprimir tus datos, y revocar tu autorización, escribiendo por WhatsApp al <a href={waHref} target="_blank" rel="noopener">{wa}</a>{academy.contactEmail && <> o a <a href={`mailto:${academy.contactEmail}`}>{academy.contactEmail}</a></>}. A continuación está la política completa.</p>
+  </div>
+
+  <h2>Contenido</h2>
+  <ol class="lgl__toc">
+    <li><a href="#responsable">Responsable del tratamiento</a></li>
+    <li><a href="#marco">Marco legal</a></li>
+    <li><a href="#datos">Qué datos tratamos</a></li>
+    <li><a href="#sitio">Cómo funciona este sitio</a></li>
+    <li><a href="#finalidades">Para qué usamos los datos</a></li>
+    <li><a href="#autorizacion">Autorización</a></li>
+    <li><a href="#menores">Niñas, niños y adolescentes</a></li>
+    <li><a href="#sensibles">Datos sensibles e imágenes</a></li>
+    <li><a href="#terceros">Terceros que intervienen</a></li>
+    <li><a href="#derechos">Tus derechos</a></li>
+    <li><a href="#procedimiento">Consultas y reclamos</a></li>
+    <li><a href="#seguridad">Seguridad y conservación</a></li>
+    <li><a href="#cookies">Cookies</a></li>
+    <li><a href="#vigencia">Vigencia y cambios</a></li>
+  </ol>
+
+  <h2 id="responsable">1. Responsable del tratamiento</h2>
+  <dl>
+    <dt>Nombre</dt><dd>{academy.name}</dd>
+    <dt>NIT</dt><dd>{academy.legal.nit || <span class="pending">{pending('NIT')}</span>}</dd>
+    <dt>Representante legal</dt><dd>{academy.legal.representative || <span class="pending">{pending('NOMBRE')}</span>}</dd>
+    <dt>Domicilio</dt><dd>{place}, Colombia</dd>
+    <dt>WhatsApp</dt><dd><a href={waHref} target="_blank" rel="noopener">{wa}</a></dd>
+    <dt>Correo</dt><dd>{academy.contactEmail ? <a href={`mailto:${academy.contactEmail}`}>{academy.contactEmail}</a> : <span class="pending">{pending('CORREO')}</span>}</dd>
+  </dl>
+  <p>La dirección del club atiende las consultas y reclamos sobre datos personales por los canales anteriores.</p>
+
+  <h2 id="marco">2. Marco legal</h2>
+  <p>Esta política cumple el artículo 15 de la Constitución Política de Colombia, la Ley Estatutaria 1581 de 2012 y el Decreto 1074 de 2015 (Capítulo 25, que incorpora el Decreto 1377 de 2013), y las normas que los modifiquen o sustituyan.</p>
+
+  <h2 id="datos">3. Qué datos tratamos</h2>
+  <h3>Cuando nos escribes desde este sitio</h3>
+  <ul>
+    <li>Nombre.</li>
+    <li>Número de WhatsApp o correo electrónico, según el medio que elijas.</li>
+    <li>Programa de interés y el mensaje que quieras añadir.</li>
+    <li>Si haces la solicitud como madre, padre o tutor de un menor.</li>
+  </ul>
+  <h3>Si te inscribes en el club</h3>
+  <ul>
+    <li>Datos de identificación y contacto del deportista y, si es menor, de su representante legal.</li>
+    <li>Un contacto para emergencias.</li>
+    <li>Información de salud necesaria para entrenar con seguridad, que es un dato sensible y de entrega voluntaria (ver punto 8).</li>
+    <li>Fotografías o vídeos, solo con una autorización aparte.</li>
+  </ul>
+
+  <h2 id="sitio">4. Cómo funciona este sitio</h2>
+  <p>Este sitio no tiene servidor propio ni base de datos. El formulario de inscripción no guarda nada: arma un mensaje con los datos que escribes y abre WhatsApp en tu dispositivo. El mensaje solo llega al club si tú lo envías desde WhatsApp. El sitio no usa cookies, ni herramientas de analítica, ni publicidad.</p>
+
+  <h2 id="finalidades">5. Para qué usamos los datos</h2>
+  <ul>
+    <li>Responder tu solicitud de información.</li>
+    <li>Coordinar tu primera clase.</li>
+    <li>Gestionar la inscripción, la asistencia, los grados y la participación en actividades y competencias.</li>
+    <li>Avisarte de horarios, cambios o cancelaciones de clases.</li>
+    <li>Contactar a tu contacto de emergencia si lo necesitas durante una actividad.</li>
+    <li>Cumplir obligaciones legales y atender requerimientos de autoridades.</li>
+  </ul>
+  <p>No vendemos, alquilamos ni cedemos tus datos, y no los usamos para publicidad de terceros. Si quisiéramos usarlos para otra finalidad, te pediríamos una nueva autorización.</p>
+
+  <h2 id="autorizacion">6. Autorización</h2>
+  <p>Tratamos tus datos con tu autorización previa, expresa e informada. En el sitio la das al marcar la casilla del formulario y enviar el mensaje. En la inscripción presencial la das por escrito. Puedes revocarla cuando quieras, salvo que exista un deber legal o contractual de conservar los datos.</p>
+
+  <h2 id="menores">7. Niñas, niños y adolescentes</h2>
+  <p>Solo tratamos datos de menores de edad con la autorización de su madre, padre o representante legal, respetando su interés superior y sus derechos fundamentales, y teniendo en cuenta su opinión según su madurez. Por eso, cuando eliges un programa para menores, el formulario pide confirmar que eres su representante. Si eres menor de edad, pide a un adulto responsable que haga la solicitud.</p>
+
+  <h2 id="sensibles">8. Datos sensibles e imágenes</h2>
+  <p>La información de salud es un dato sensible. Responder preguntas sobre datos sensibles es voluntario y ninguna actividad depende de que los entregues, salvo lo estrictamente necesario para que la práctica sea segura. Solo los conocen el sensei y las personas que deben actuar en una emergencia.</p>
+  <p>Solo publicamos fotos o vídeos de deportistas, en el sitio o en redes, con una autorización aparte. Esa autorización la firma el representante legal cuando el deportista es menor de edad. Puedes retirarla en cualquier momento y retiraremos el contenido en el que aparezcas, en la medida en que dependa del club.</p>
+
+  <h2 id="terceros">9. Terceros que intervienen</h2>
+  <ul>
+    <li><strong>WhatsApp (Meta Platforms):</strong> los mensajes que nos envías viajan por WhatsApp, un servicio de terceros con sus propias condiciones y servidores fuera de Colombia. Al usarlo aceptas también sus políticas.</li>
+    <li><strong>GitHub Pages (GitHub, Inc.):</strong> aloja este sitio. Como cualquier servidor web, puede registrar datos técnicos como la dirección IP para seguridad y funcionamiento, según su propia política de privacidad. El club no recibe esos registros.</li>
+    <li><strong>Google Maps:</strong> el enlace a la ubicación del dojo abre Google Maps, que se rige por las condiciones de Google.</li>
+  </ul>
+  <p>Solo compartimos datos de deportistas cuando sea necesario para la actividad, por ejemplo con ligas o federaciones para inscribirte en competencias o grados, o cuando una autoridad lo exija.</p>
+
+  <h2 id="derechos">10. Tus derechos</h2>
+  <p>Como titular de los datos tienes derecho a:</p>
+  <ul>
+    <li>Conocer, actualizar y rectificar tus datos.</li>
+    <li>Pedir prueba de la autorización que nos diste.</li>
+    <li>Saber, si lo pides, qué uso le hemos dado a tus datos.</li>
+    <li>Presentar quejas ante la Superintendencia de Industria y Comercio, después de haber hecho tu consulta o reclamo ante el club.</li>
+    <li>Revocar la autorización y pedir que suprimamos tus datos, cuando no exista un deber legal o contractual de conservarlos.</li>
+    <li>Acceder gratis a tus datos.</li>
+  </ul>
+
+  <h2 id="procedimiento">11. Consultas y reclamos</h2>
+  <p>Escríbenos por WhatsApp{academy.contactEmail ? ', por correo' : ''} o entrega tu solicitud por escrito en el dojo. Incluye tu nombre, tu documento de identidad, lo que pides y cómo quieres recibir la respuesta. Si actúas en nombre de otra persona, acredita que la representas.</p>
+  <h3>Consultas</h3>
+  <p>Para saber qué datos tenemos o cómo los usamos. Respondemos en un máximo de diez (10) días hábiles. Si no es posible, te explicamos el motivo y respondemos en un máximo de cinco (5) días hábiles más.</p>
+  <h3>Reclamos</h3>
+  <p>Para corregir, actualizar o suprimir datos, revocar la autorización o denunciar un incumplimiento.</p>
+  <ul>
+    <li>Si falta información, te la pedimos dentro de los cinco (5) días hábiles siguientes. Si en dos (2) meses no la completas, entendemos que desististe.</li>
+    <li>Dentro de los dos (2) días hábiles siguientes marcamos tus datos como «reclamo en trámite».</li>
+    <li>Respondemos en un máximo de quince (15) días hábiles. Si no es posible, te explicamos el motivo y respondemos en un máximo de ocho (8) días hábiles más.</li>
+  </ul>
+
+  <h2 id="seguridad">12. Seguridad y conservación</h2>
+  <p>Aplicamos medidas razonables para evitar la pérdida, el uso o el acceso no autorizado a tus datos. Solo acceden a ellos las personas del club que los necesitan para las finalidades descritas.</p>
+  <p>Borramos los datos de las solicitudes que no terminan en inscripción dentro de los seis (6) meses siguientes. Conservamos los datos de los deportistas inscritos mientras dure su vinculación con el club y, después, solo el tiempo que exija la ley o el que sea necesario para atender reclamaciones.</p>
+
+  <h2 id="cookies">13. Cookies</h2>
+  <p>Este sitio no usa cookies ni guarda información en tu navegador. Las fuentes y las imágenes se sirven desde el propio sitio, sin servicios externos de seguimiento.</p>
+
+  <h2 id="vigencia">14. Vigencia y cambios</h2>
+  <p>Esta política rige desde el {academy.legal.policyDate} y se aplica mientras el club trate datos personales. Si cambia de forma importante, lo anunciaremos en este sitio antes de aplicar el cambio y, cuando la ley lo exija, pediremos una nueva autorización.</p>
+  <p>Consulta también los <a href={withBase('/terminos/')}>Términos de uso</a>.</p>
+</Legal>

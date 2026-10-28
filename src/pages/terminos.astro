@@ -1,0 +1,58 @@
+---
+import { withBase } from '../config/url';
+import { academy } from '../config/academy';
+import Legal from '../layouts/Legal.astro';
+
+const wa = academy.whatsappNumber;
+const waHref = `https://wa.me/${wa.replace(/\D/g, '')}`;
+const place = [academy.address, academy.city].filter(Boolean).join(', ');
+---
+<Legal
+  title="Términos de uso"
+  heading="Términos de uso y aviso legal"
+  description="Condiciones de uso del sitio web del Club Deportivo de Judo Hikawa."
+>
+  <h2 id="titular">1. Quiénes somos</h2>
+  <p>Este sitio pertenece al {academy.name}{academy.legal.nit ? `, NIT ${academy.legal.nit}` : ''}, con domicilio en {place}, Colombia. Contacto: WhatsApp <a href={waHref} target="_blank" rel="noopener">{wa}</a>{academy.contactEmail && <>, <a href={`mailto:${academy.contactEmail}`}>{academy.contactEmail}</a></>}.</p>
+  <p>Al usar el sitio aceptas estos términos. Si no estás de acuerdo, no lo uses.</p>
+
+  <h2 id="objeto">2. Para qué sirve este sitio</h2>
+  <p>El sitio informa sobre el club, sus programas y el judo, y te permite pedir información por WhatsApp. No es una tienda en línea: enviar el formulario no te inscribe ni crea ninguna obligación de pago. La inscripción solo queda hecha cuando la formalizas directamente con el club.</p>
+
+  <h2 id="informacion">3. Información del sitio</h2>
+  <p>Procuramos que la información sea correcta y esté al día. Los horarios, edades, precios y demás condiciones pueden cambiar. Lo que el club aún no ha confirmado aparece marcado como pendiente. En caso de diferencia, vale lo que el club te confirme directamente.</p>
+
+  <h2 id="practica">4. Práctica del judo</h2>
+  <p>El judo es un deporte de contacto con riesgo propio de lesiones, como golpes, torceduras o caídas. Los contenidos técnicos del sitio, como las técnicas, las fases del lanzamiento o el entrenamiento físico, son solo informativos y no reemplazan la enseñanza presencial de un instructor.</p>
+  <ul>
+    <li>No intentes ejecutar técnicas de proyección, estrangulación o luxación sin la supervisión de un instructor y sin el material adecuado.</li>
+    <li>Antes de empezar a entrenar, consulta a un médico si tienes alguna condición de salud.</li>
+    <li>Para inscribirte, el club puede pedirte una constancia médica de aptitud y la firma de un consentimiento informado. Para menores de edad lo firma su representante legal.</li>
+  </ul>
+
+  <h2 id="responsabilidad">5. Responsabilidad</h2>
+  <p>El club no responde por:</p>
+  <ul>
+    <li>Daños derivados de practicar lo que muestra el sitio fuera de una clase supervisada.</li>
+    <li>Interrupciones, errores o caídas del sitio o del servicio de alojamiento.</li>
+    <li>El funcionamiento, las condiciones o el uso de datos de servicios de terceros como WhatsApp o Google Maps.</li>
+    <li>Decisiones tomadas solo con base en la información del sitio, sin confirmarla con el club.</li>
+  </ul>
+  <p>Nada de lo anterior limita la responsabilidad que la ley colombiana no permite excluir, ni los derechos que te reconoce como consumidor.</p>
+
+  <h2 id="propiedad">6. Propiedad intelectual</h2>
+  <p>El nombre, el logotipo y los textos del club le pertenecen y están protegidos por la Ley 23 de 1982 y la Decisión Andina 351 de 1993. No puedes usarlos con fines comerciales sin autorización escrita del club.</p>
+  <p>Los vídeos y fotogramas de judo son de Artem Podrez y se usan bajo la licencia de Pexels (<a href={academy.footage.page} target="_blank" rel="noopener">ver fuente</a>). Las tipografías Bebas Neue e Inter se usan bajo la licencia SIL Open Font License.</p>
+
+  <h2 id="enlaces">7. Enlaces a otros sitios</h2>
+  <p>El sitio enlaza a servicios de terceros, como WhatsApp, Google Maps o Pexels. El club no controla esos sitios ni responde por su contenido o sus políticas.</p>
+
+  <h2 id="datos">8. Datos personales</h2>
+  <p>El tratamiento de tus datos se rige por la <a href={withBase('/privacidad/')}>Política de tratamiento de datos personales</a>.</p>
+
+  <h2 id="ley">9. Ley aplicable</h2>
+  <p>Estos términos se rigen por las leyes de la República de Colombia. Cualquier diferencia se intentará resolver primero de forma directa con el club. Si no hay acuerdo, la resolverán los jueces competentes de Colombia, sin perjuicio de los derechos que la ley te reconoce como consumidor.</p>
+
+  <h2 id="cambios">10. Cambios</h2>
+  <p>El club puede actualizar estos términos. La versión vigente es siempre la publicada en esta página, con su fecha.</p>
+</Legal>
