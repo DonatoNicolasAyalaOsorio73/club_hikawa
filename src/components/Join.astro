@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../config/url';
 interface Props { id?: string }
 const { id = 'comunidad' } = Astro.props;
 ---
@@ -11,7 +12,7 @@ const { id = 'comunidad' } = Astro.props;
     </div>
     <svg class="join__arrow" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true"><path d="M12 36 36 12M16 12h20v20" fill="none" stroke="currentColor" stroke-width="4" /></svg>
   </div>
-  <a class="display join__word" href="/#inscripcion">INSCRÍBETE</a>
+  <a class="display join__word" href={withBase('/#inscripcion')}>INSCRÍBETE</a>
 </section>
 
 <style>

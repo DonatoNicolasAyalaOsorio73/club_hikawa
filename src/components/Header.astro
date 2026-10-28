@@ -1,16 +1,17 @@
 ---
+import { withBase } from '../config/url';
 // One set of labels everywhere: desktop, phone menu and footer. Links are absolute so they work from
 // every page; on the page that holds the target, site.ts turns them into smooth in-page scrolls.
 interface Props { current?: 'home' | 'judo' }
 const { current = 'home' } = Astro.props;
-const nav = [['/#inicio', 'Inicio'], ['/el-judo/', 'El judo', 'judo'], ['/#programas', 'Programas'], ['/#informacion', 'Información'], ['/#preguntas', 'Preguntas'], ['/el-judo/#sensei', 'Sensei']];
+const nav = [[withBase('/#inicio'), 'Inicio'], [withBase('/el-judo/'), 'El judo', 'judo'], [withBase('/#programas'), 'Programas'], [withBase('/#informacion'), 'Información'], [withBase('/#preguntas'), 'Preguntas'], [withBase('/el-judo/#sensei'), 'Sensei']];
 const mobileNav = nav;
 ---
-<a class="skip" href="/#inscripcion">Saltar a la inscripción</a>
+<a class="skip" href={withBase('/#inscripcion')}>Saltar a la inscripción</a>
 
 <header class="hdr" data-header>
-  <a class="hdr__brand" href="/" aria-label="Club Deportivo de Judo Hikawa, inicio">
-    <img src="/assets/hikawa-logo-88.webp" alt="" width="44" height="44" />
+  <a class="hdr__brand" href={withBase('/')} aria-label="Club Deportivo de Judo Hikawa, inicio">
+    <img src={withBase('/assets/hikawa-logo-88.webp')} alt="" width="44" height="44" />
     <span class="hdr__words">
       <span class="hdr__name">HIKAWA</span>
       <span class="hdr__sub">CLUB DEPORTIVO DE JUDO</span>
@@ -20,7 +21,7 @@ const mobileNav = nav;
     {nav.map(([href, label, page]) => <a href={href} data-spy aria-current={page && page === current ? 'page' : undefined}>{label}</a>)}
   </nav>
   <div class="hdr__actions">
-    <a class="btn btn--red hdr__cta" href="/#inscripcion" data-magnetic>INSCRÍBETE</a>
+    <a class="btn btn--red hdr__cta" href={withBase('/#inscripcion')} data-magnetic>INSCRÍBETE</a>
     <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="menu-movil" aria-label="Abrir menú" data-menu-toggle>
       <span></span><span></span>
     </button>
@@ -31,7 +32,7 @@ const mobileNav = nav;
   <nav aria-label="Menú móvil">
     {mobileNav.map(([href, label, page], i) => <a href={href} data-menu-link data-spy style={`--i:${i}`} aria-current={page && page === current ? 'page' : undefined}>{label}</a>)}
   </nav>
-  <a class="btn btn--ink btn--lg menu__cta" href="/#inscripcion" data-menu-link>QUIERO ENTRENAR <span class="arrow" aria-hidden="true">→</span></a>
+  <a class="btn btn--ink btn--lg menu__cta" href={withBase('/#inscripcion')} data-menu-link>QUIERO ENTRENAR <span class="arrow" aria-hidden="true">→</span></a>
 </div>
 
 <button type="button" class="totop" aria-label="Volver arriba" data-totop>

@@ -1,5 +1,6 @@
 // All club data lives here. Empty strings mean "not provided yet": the page then shows a visible
 // pending marker instead of inventing a value.
+import { base } from './url';
 
 export type Day = 'LUN' | 'MAR' | 'MIÉ' | 'JUE' | 'VIE' | 'SÁB';
 export type ProgramName = 'Infantil' | 'Juvenil' | 'Adultos' | 'Competición';
@@ -29,9 +30,9 @@ export const academy = {
   sensei: { name: 'Carlos Riascos', rank: '', philosophy: '', milestones: [] as { year: string; text: string; place: string }[] },
   programs: [
     { id: 'infantil', name: 'Infantil', focus: 'Confianza, coordinación, disciplina y respeto.', ages: '', minor: true, schedule: {}, media: { pending: 'INFANTIL: foto real de clase, plano abierto' }, cta: 'QUIERO ENTRENAR' },
-    { id: 'juvenil', name: 'Juvenil', focus: 'Desarrollo técnico, trabajo en equipo y preparación física.', ages: '', minor: true, schedule: {}, media: { video: '/video/6253407.mp4', poster: '/posters/6253407.webp' }, cta: 'QUIERO ENTRENAR' },
-    { id: 'adultos', name: 'Adultos', focus: 'Condición física, seguridad personal y crecimiento.', ages: '', minor: false, schedule: {}, media: { video: '/video/6254568.mp4', poster: '/posters/6254568.webp', position: '50% 30%' }, cta: 'QUIERO ENTRENAR' },
-    { id: 'competicion', name: 'Competición', focus: 'Entrenamiento avanzado y preparación competitiva.', ages: '', minor: false, schedule: {}, media: { video: '/video/6253404.mp4', poster: '/posters/6253404.webp', position: '50% 45%' }, cta: 'QUIERO COMPETIR' },
+    { id: 'juvenil', name: 'Juvenil', focus: 'Desarrollo técnico, trabajo en equipo y preparación física.', ages: '', minor: true, schedule: {}, media: { video: base + '/video/6253407.mp4', poster: base + '/posters/6253407.webp' }, cta: 'QUIERO ENTRENAR' },
+    { id: 'adultos', name: 'Adultos', focus: 'Condición física, seguridad personal y crecimiento.', ages: '', minor: false, schedule: {}, media: { video: base + '/video/6254568.mp4', poster: base + '/posters/6254568.webp', position: '50% 30%' }, cta: 'QUIERO ENTRENAR' },
+    { id: 'competicion', name: 'Competición', focus: 'Entrenamiento avanzado y preparación competitiva.', ages: '', minor: false, schedule: {}, media: { video: base + '/video/6253404.mp4', poster: base + '/posters/6253404.webp', position: '50% 45%' }, cta: 'QUIERO COMPETIR' },
   ] as Program[],
   footage: {
     credit: 'Vídeo: Artem Podrez · Pexels (licencia Pexels)',
@@ -45,8 +46,8 @@ export const academy = {
 // actual footage: grips 0 to 0.55 s, pull to 1.3 s, entry to 2.0 s, lift and projection to 3.2 s,
 // landing and ground control to 7.1 s, tori standing over uke 7.2 to 8.9 s.
 export const sequence = {
-  desktop: { path: '/frames/d/f', count: 120 },
-  mobile: { path: '/frames/m/f', count: 102 },
+  desktop: { path: base + '/frames/d/f', count: 120 },
+  mobile: { path: base + '/frames/m/f', count: 102 },
   phases: [
     { n: '01', name: 'POSE INICIAL', line: 'No es fuerza bruta. Es control.', note: 'Shizentai: tori y uke frente a frente, atención total antes del contacto.', from: 0, to: 0.096, still: 6 }, // taste-skill-ignore: approved, the order of the throw is the content
     { n: '02', name: 'KUZUSHI', line: 'Lee el movimiento.', note: 'Agarre de manga y solapa. Tracción hacia delante y arriba: uke pierde el equilibrio.', from: 0.096, to: 0.222, still: 19 }, // taste-skill-ignore: approved, the order of the throw is the content

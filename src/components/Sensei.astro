@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../config/url';
 import { academy } from '../config/academy';
 const s = academy.sensei;
 const milestones = s.milestones.length ? s.milestones : [
@@ -45,7 +46,7 @@ const pendingMilestones = !s.milestones.length;
           ))}
         </ol>
       </div>
-      <a class="text-link sen__cta" href="/#inscripcion">Entrena con el sensei →</a>
+      <a class="text-link sen__cta" href={withBase('/#inscripcion')}>Entrena con el sensei →</a>
     </div>
   </div>
 </section>

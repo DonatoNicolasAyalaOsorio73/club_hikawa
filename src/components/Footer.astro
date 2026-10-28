@@ -1,12 +1,13 @@
 ---
+import { withBase } from '../config/url';
 import { academy } from '../config/academy';
 const wa = academy.whatsappNumber;
 const mail = academy.contactEmail;
-const nav = [['/#inicio', 'Inicio'], ['/el-judo/', 'El judo'], ['/#programas', 'Programas'], ['/#informacion', 'Información'], ['/#preguntas', 'Preguntas'], ['/el-judo/#sensei', 'Sensei'], ['/#inscripcion', 'Inscríbete']];
+const nav = [[withBase('/#inicio'), 'Inicio'], [withBase('/el-judo/'), 'El judo'], [withBase('/#programas'), 'Programas'], [withBase('/#informacion'), 'Información'], [withBase('/#preguntas'), 'Preguntas'], [withBase('/el-judo/#sensei'), 'Sensei'], [withBase('/#inscripcion'), 'Inscríbete']];
 ---
 <footer class="ftr">
   <div class="ftr__tile ftr__statement f-graphite">
-    <img src="/assets/hikawa-logo-160.webp" alt="Logo del Club Deportivo de Judo Hikawa" width="80" height="80" loading="lazy" />
+    <img src={withBase('/assets/hikawa-logo-160.webp')} alt="Logo del Club Deportivo de Judo Hikawa" width="80" height="80" loading="lazy" />
     <p class="lead">Club Deportivo de Judo Hikawa. Judo, técnica y carácter.</p>
     <p class="small soft ftr__legal">
       <a id="privacidad" href="#privacidad">POLÍTICA DE PRIVACIDAD [ENLACE POR DEFINIR]</a><br />
@@ -29,7 +30,7 @@ const nav = [['/#inicio', 'Inicio'], ['/el-judo/', 'El judo'], ['/#programas', '
     <p class="ftr__social"><span class="pending">[Instagram]</span> <span class="pending">[Facebook]</span> <span class="pending">[TikTok]</span></p>
   </div>
   <div class="ftr__tile ftr__mark f-black" aria-hidden="true"><span class="display">HIKAWA</span></div>
-  <a class="ftr__tile ftr__go f-white" href="/#inscripcion">
+  <a class="ftr__tile ftr__go f-white" href={withBase('/#inscripcion')}>
     <span class="lead ftr__go-text">Quiero entrenar</span>
     <svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><path d="M12 36 36 12M16 12h20v20" fill="none" stroke="currentColor" stroke-width="4" /></svg>
   </a>

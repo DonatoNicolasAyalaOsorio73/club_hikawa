@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../config/url';
 import { academy, sequence } from '../config/academy';
 const pad = (n: number) => String(n).padStart(3, '0');
 ---
@@ -26,7 +27,7 @@ const pad = (n: number) => String(n).padStart(3, '0');
         <p class="lead seq__lead" data-load style="--d:420ms">Club Deportivo de Judo Hikawa. Disciplina, técnica y carácter.</p>
         <div class="seq__ctas" data-load style="--d:520ms">
           <a class="btn btn--red btn--lg" href="#inscripcion" data-magnetic data-cursor="(INSCRÍBETE)">INSCRÍBETE <span class="arrow" aria-hidden="true">→</span></a>
-          <a class="btn btn--paper btn--lg" href="/el-judo/">DESCUBRE EL JUDO</a>
+          <a class="btn btn--paper btn--lg" href={withBase('/el-judo/')}>DESCUBRE EL JUDO</a>
         </div>
       </div>
     </div>

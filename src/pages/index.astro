@@ -9,16 +9,17 @@ import Join from '../components/Join.astro';
 import Registration from '../components/Registration.astro';
 import Footer from '../components/Footer.astro';
 import Loader from '../components/Loader.astro';
+import { withBase } from '../config/url';
 ---
 <Base>
   <!-- Sections that moved to /el-judo/ keep their old links working. -->
-  <script is:inline slot="head">
+  <script is:inline slot="head" define:vars={{ judoPage: withBase('/el-judo/#') }}>
     (function () {
       var moved = ['valores', 'tecnicas', 'rendimiento', 'calendario', 'grados', 'sensei'];
       // On load, and on a same-page hash change (an old link followed while already on the home page).
       var check = function () {
         var id = location.hash.slice(1);
-        if (moved.indexOf(id) !== -1) location.replace('/el-judo/#' + id);
+        if (moved.indexOf(id) !== -1) location.replace(judoPage + id);
       };
       check();
       window.addEventListener('hashchange', check);

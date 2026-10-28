@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../config/url';
 import '../styles/global.css';
 
 interface Props {
@@ -25,11 +26,11 @@ const {
     <meta name="description" content={description} />
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={ogDescription} />
-    <meta property="og:image" content="assets/hikawa-logo.png" />
+    <meta property="og:image" content={Astro.site ? new URL(withBase('/assets/hikawa-logo.png'), Astro.site).href : withBase('/assets/hikawa-logo.png')} />
     <meta name="theme-color" content="#0A0A0A" />
-    <link rel="icon" type="image/webp" href="/assets/hikawa-logo-88.webp" />
-    {heroPreload && <link rel="preload" as="image" href="/frames/d/f001.webp" media="(min-width: 1101px)" fetchpriority="high" />}
-    {heroPreload && <link rel="preload" as="image" href="/frames/m/f001.webp" media="(max-width: 1100px)" fetchpriority="high" />}
+    <link rel="icon" type="image/webp" href={withBase('/assets/hikawa-logo-88.webp')} />
+    {heroPreload && <link rel="preload" as="image" href={withBase('/frames/d/f001.webp')} media="(min-width: 1101px)" fetchpriority="high" />}
+    {heroPreload && <link rel="preload" as="image" href={withBase('/frames/m/f001.webp')} media="(max-width: 1100px)" fetchpriority="high" />}
     <slot name="head" />
     <script is:inline>document.documentElement.classList.add('js')</script>
   </head>
