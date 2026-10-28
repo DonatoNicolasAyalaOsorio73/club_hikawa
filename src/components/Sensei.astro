@@ -1,0 +1,79 @@
+---
+import { academy } from '../config/academy';
+const s = academy.sensei;
+const milestones = s.milestones.length ? s.milestones : [
+  { year: '[Año]', text: '[Evento internacional o competencia, verificado]', place: '[PAÍS]' },
+  { year: '[Año]', text: '[Seminario o curso internacional, verificado]', place: '[PAÍS]' },
+  { year: '[Año]', text: '[Certificación o grado obtenido, verificado]', place: '[ENTIDAD]' },
+  { year: '[Año]', text: '[Logro competitivo, verificado]', place: '[EVENTO]' },
+];
+const pendingMilestones = !s.milestones.length;
+---
+<section id="sensei" class="sen f-white" aria-labelledby="sensei-title">
+  <div class="sen__panel f-graphite">
+    <div class="sen__left">
+      <h2 id="sensei-title" class="head sen__name">{s.name}</h2>
+      <p class="lead">Instructor principal del Club Deportivo de Judo Hikawa. Experiencia que se transmite.</p>
+      <span class="pending">{s.rank || '[GRADO: COMPLETAR CON DATO VERIFICADO]'}</span>
+      <div class="sen__portrait media media--pending" role="img" aria-label="Retrato del sensei pendiente">
+        <span class="sen__kanji" lang="ja" aria-hidden="true">先生</span>
+        <span class="pending">[RETRATO: Sensei {s.name}, vertical, luz lateral]</span>
+      </div>
+    </div>
+
+    <div class="sen__right">
+      <blockquote class="sen__quote">
+        {s.philosophy || <span class="pending">[FILOSOFÍA: Cita del sensei, en sus propias palabras, sobre qué significa enseñar judo. 2 o 3 frases.]</span>}
+      </blockquote>
+      <div class="sen__block">
+        <h3 class="name sen__h">Qué aprenderás</h3>
+        <p><span class="pending">[Enfoque de enseñanza: cómo trabaja con principiantes, niños y competidores.]</span></p>
+      </div>
+      <div class="sen__block">
+        <h3 class="name sen__h">Certificaciones</h3>
+        <p><span class="pending">[Títulos de entrenador, federación, arbitraje; solo documentados.]</span></p>
+      </div>
+      <div class="sen__block">
+        <h3 class="name sen__h">Trayectoria internacional</h3>
+        <ol class="sen__career">
+          {milestones.map((m) => (
+            <li class:list={{ 'is-pending': pendingMilestones }}>
+              <span class="sen__year">{m.year}</span>
+              <span>{m.text}</span>
+              <span class="small soft">{m.place}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <a class="text-link sen__cta" href="/#inscripcion">Entrena con el sensei →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sen { padding: 20px; }
+  .sen__panel { position: relative; overflow: clip; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); min-height: 110svh; padding: clamp(40px, 5vw, 72px) clamp(20px, 3.6vw, 56px) 0; }
+  .sen__left { grid-column: 1 / span 6; display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
+  .sen__name { font-size: clamp(72px, 9vw, 152px); line-height: 0.86; }
+  .sen__left .lead { max-width: 26ch; }
+  .sen__portrait { margin-top: auto; width: min(38vw, 520px); aspect-ratio: 1; border-radius: 50%; margin-bottom: -8%; align-items: center; justify-content: center; background: var(--tone-dark); color: var(--soft-on-dark); flex-direction: column; gap: 18px; padding: 24px; }
+  .sen__kanji { font-size: clamp(64px, 8vw, 128px); font-weight: 700; color: var(--red); line-height: 1; }
+  .sen__right { grid-column: 8 / span 5; display: flex; flex-direction: column; gap: 40px; padding-bottom: clamp(40px, 5vw, 72px); }
+  .sen__quote { font-size: var(--step-lead); }
+  .sen__h { font-size: var(--step-lead); }
+  .sen__block { display: flex; flex-direction: column; gap: 12px; }
+  .sen__career { display: flex; flex-direction: column; gap: 4px; }
+  .sen__career li { display: grid; grid-template-columns: 80px minmax(0, 1fr) auto; gap: 16px; align-items: baseline; padding: 14px 16px; background: var(--tone-dark); }
+  .sen__career li.is-pending { color: var(--soft-on-dark); }
+  .sen__year { font-size: 20px; font-weight: 700; color: var(--red); }
+  .sen__cta { align-self: flex-start; }
+  /* Phone: name and line, then the details, then the portrait cropped by the panel's bottom edge. */
+  @media (max-width: 1100px) {
+    .sen { padding: 10px; }
+    .sen__panel { min-height: 0; display: flex; flex-direction: column; gap: 22px; }
+    .sen__left { display: contents; }
+    .sen__right { order: 1; padding: 26px 0 8px; }
+    .sen__portrait { order: 2; width: 86vw; max-width: 520px; margin: 8px auto -22%; }
+    .sen__career li { grid-template-columns: 1fr; gap: 6px; }
+  }
+</style>

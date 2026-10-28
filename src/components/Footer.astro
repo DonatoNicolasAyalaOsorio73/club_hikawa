@@ -1,0 +1,72 @@
+---
+import { academy } from '../config/academy';
+const wa = academy.whatsappNumber;
+const mail = academy.contactEmail;
+const nav = [['/#inicio', 'Inicio'], ['/el-judo/', 'El judo'], ['/#programas', 'Programas'], ['/#informacion', 'Información'], ['/#preguntas', 'Preguntas'], ['/el-judo/#sensei', 'Sensei'], ['/#inscripcion', 'Inscríbete']];
+---
+<footer class="ftr">
+  <div class="ftr__tile ftr__statement f-graphite">
+    <img src="/assets/hikawa-logo-160.webp" alt="Logo del Club Deportivo de Judo Hikawa" width="80" height="80" loading="lazy" />
+    <p class="lead">Club Deportivo de Judo Hikawa. Judo, técnica y carácter.</p>
+    <p class="small soft ftr__legal">
+      <a id="privacidad" href="#privacidad">POLÍTICA DE PRIVACIDAD [ENLACE POR DEFINIR]</a><br />
+      © 2026 CLUB DEPORTIVO DE JUDO HIKAWA
+    </p>
+  </div>
+  <nav class="ftr__tile ftr__nav f-graphite" aria-label="Pie de página">
+    {nav.map(([href, label]) => <a href={href}>{label}</a>)}
+  </nav>
+  <div class="ftr__tile f-graphite">
+    <h3 class="name">Ubicación</h3>
+    <p>{academy.address || <span class="pending">[Dirección del dojo]</span>}</p>
+    <p>{academy.city || <span class="pending">[Ciudad]</span>}</p>
+  </div>
+  <div class="ftr__tile f-graphite">
+    <h3 class="name">Contacto</h3>
+    <p>{wa ? <a class="text-link" href={`https://wa.me/${wa.replace(/\D/g, '')}`}>WhatsApp {wa}</a> : <span class="pending">[WhatsApp]</span>}</p>
+    <p>{mail ? <a class="text-link" href={`mailto:${mail}`}>{mail}</a> : <span class="pending">[Email]</span>}</p>
+    <h3 class="name ftr__h2">Redes</h3>
+    <p class="ftr__social"><span class="pending">[Instagram]</span> <span class="pending">[Facebook]</span> <span class="pending">[TikTok]</span></p>
+  </div>
+  <div class="ftr__tile ftr__mark f-black" aria-hidden="true"><span class="display">HIKAWA</span></div>
+  <a class="ftr__tile ftr__go f-white" href="/#inscripcion">
+    <span class="lead ftr__go-text">Quiero entrenar</span>
+    <svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><path d="M12 36 36 12M16 12h20v20" fill="none" stroke="currentColor" stroke-width="4" /></svg>
+  </a>
+  <p class="ftr__credit small"><a href={academy.footage.page} target="_blank" rel="noopener">Vídeos: Artem Podrez · Pexels (licencia Pexels)</a></p>
+</footer>
+
+<style>
+  /* Outer padding plus tile padding lands the text on the page margin. */
+  .ftr { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; padding: 8px max(8px, calc(var(--margin) - 24px)) calc(8px + env(safe-area-inset-bottom)); background: var(--black); }
+  .ftr__tile { display: flex; flex-direction: column; gap: 10px; padding: 24px; min-height: 240px; }
+  .ftr__statement { grid-column: 1 / span 4; }
+  .ftr__statement img { width: 64px; height: 64px; border-radius: 50%; background: #fff; }
+  .ftr__statement .lead { max-width: 22ch; }
+  .ftr__legal { margin-top: auto; }
+  .ftr__legal a:hover { color: var(--white); }
+  .ftr__nav { grid-column: 5 / span 3; gap: 6px; font-weight: 600; }
+  .ftr__nav a { padding: 3px 0; width: max-content; }
+  .ftr__nav a:hover { color: var(--red); }
+  .ftr__tile:nth-child(3) { grid-column: 8 / span 2; }
+  .ftr__tile:nth-child(4) { grid-column: 10 / span 3; }
+  .ftr__h2 { margin-top: 12px; }
+  .ftr__social { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ftr__mark { grid-column: 1 / span 8; min-height: 320px; align-items: center; justify-content: center; overflow: clip; }
+  .ftr__mark span { font-size: clamp(96px, 15vw, 260px); line-height: 0.8; }
+  .ftr__go { grid-column: 9 / span 4; min-height: 320px; justify-content: space-between; transition: background-color 120ms linear, color 120ms linear; }
+  .ftr__go-text { font-weight: 650; font-size: clamp(28px, 2.4vw, 36px); }
+  .ftr__go svg { align-self: flex-end; }
+  .ftr__go:hover, .ftr__go:focus-visible { background: var(--red); color: var(--on-red); }
+  .ftr__credit { grid-column: 1 / -1; padding: 10px 16px 6px; color: var(--soft-on-dark); }
+  .ftr__credit a:hover { color: var(--white); }
+  @media (max-width: 1100px) {
+    .ftr { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .ftr__mark { grid-column: 1 / -1; order: -2; min-height: 160px; }
+    .ftr__go { grid-column: 1 / -1; order: -1; min-height: 180px; }
+    .ftr__nav, .ftr__tile:nth-child(3), .ftr__tile:nth-child(4) { grid-column: span 1; min-height: 0; }
+    .ftr__statement { grid-column: 1 / -1; min-height: 0; }
+    .ftr__tile { padding: 20px; }
+  }
+  @media (max-width: 560px) { .ftr__nav, .ftr__tile:nth-child(3), .ftr__tile:nth-child(4) { grid-column: 1 / -1; } }
+</style>

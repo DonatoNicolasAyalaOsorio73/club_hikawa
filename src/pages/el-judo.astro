@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Values from '../components/Values.astro';
+import Techniques from '../components/Techniques.astro';
+import Performance from '../components/Performance.astro';
+import Grades from '../components/Grades.astro';
+import Sensei from '../components/Sensei.astro';
+import Join from '../components/Join.astro';
+import Footer from '../components/Footer.astro';
+
+const chapters = [
+  ['#valores', 'La filosofía'], ['#tecnicas', 'Técnicas'], ['#rendimiento', 'Entrenamiento'], ['#grados', 'Grados'], ['#sensei', 'Sensei'],
+];
+---
+<Base
+  title="El judo · Club Deportivo de Judo Hikawa"
+  description="La filosofía, las técnicas, el entrenamiento, los grados y el sensei del Club Deportivo de Judo Hikawa."
+  ogTitle="El judo en el Club Deportivo de Judo Hikawa"
+  ogDescription="Filosofía, técnica, entrenamiento y grados: cómo se aprende judo en Hikawa."
+  heroPreload={false}
+>
+  <Header current="judo" />
+  <main>
+    <section class="intro field f-black" aria-labelledby="judo-title">
+      <div class="intro__copy">
+        <h1 id="judo-title" class="display intro__title"><span class="line"><span data-line style="--i:0">El judo</span></span><span class="line"><span data-line style="--i:1">en Hikawa<span class="intro__dot">.</span></span></span></h1>
+        <p class="lead" data-load style="--d:380ms">Qué se aprende, cómo se entrena y quién enseña. Todo lo que hay detrás de cada clase.</p>
+        <nav class="intro__nav" aria-label="En esta página">
+          {chapters.map(([href, label], i) => <a href={href} data-load style={`--d:${460 + i * 60}ms`}>{label} <span aria-hidden="true">↓</span></a>)}
+        </nav>
+        <div class="intro__actions" data-load style="--d:760ms">
+          <a class="btn btn--red btn--lg" href="/#inscripcion">INSCRÍBETE <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="text-link intro__home" href="/">← Volver al inicio</a>
+        </div>
+      </div>
+      <figure class="intro__media" data-open>
+        <img src="/frames/d/f055.webp" alt="Fotograma real de un lanzamiento de judo: uke pasa por encima de tori" width="1440" height="2560" fetchpriority="high" decoding="async" />
+        <figcaption class="small">Kake: la proyección. Vídeo de Artem Podrez, Pexels.</figcaption>
+      </figure>
+    </section>
+    <Values />
+    <Techniques />
+    <Performance />
+    <Grades />
+    <Sensei />
+    <Join id="empieza-judo" />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 40px; align-items: end; min-height: 100svh; padding-top: calc(var(--header-h) + 56px); }
+  .intro__copy { grid-column: 1 / span 6; display: flex; flex-direction: column; gap: 28px; align-items: flex-start; }
+  .intro__title { font-size: var(--step-hero); line-height: 0.86; }
+  .intro__dot { color: var(--red); }
+  .intro .lead { max-width: 30ch; }
+  .intro__title .line { display: block; overflow: clip; padding: 0.06em 0 0.04em; margin: -0.06em 0 -0.04em; }
+  .intro__title [data-line] { display: block; }
+  .intro__nav { display: flex; flex-direction: column; gap: 4px; width: 100%; max-width: 420px; }
+  .intro__nav a { display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 0 16px; font-weight: 650; background: var(--graphite); transition: background-color var(--t-hover) ease, color var(--t-hover) ease; }
+  .intro__nav a:hover, .intro__nav a:focus-visible { background: var(--red); color: var(--on-red); }
+  .intro__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+  .intro__home { font-weight: 650; min-height: 44px; display: inline-flex; align-items: center; }
+  .intro__media { grid-column: 8 / span 5; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .intro__media img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 35%; }
+  .intro__media figcaption { color: var(--soft-on-dark); }
+  /* Load sequence: everything is in the HTML; the motion only adds arrival and settles within about 1.2 s. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .intro__title [data-line] { transform: translateY(105%); animation: intro-line 800ms var(--ease-expo) forwards; animation-delay: calc(100ms + var(--i) * 90ms); }
+    :global(.js) .intro [data-load] { opacity: 0; transform: translateY(12px); animation: intro-rise 500ms var(--ease-out) forwards; animation-delay: var(--d); }
+    :global(.js) .intro__media[data-open] { clip-path: inset(0 0 100% 0); animation: intro-open 1000ms var(--ease-in-out) 150ms forwards; }
+    :global(.js) .intro__media[data-open] img { transform: scale(1.08); animation: intro-settle 1100ms var(--ease-expo) 100ms forwards; }
+  }
+  @keyframes intro-line { to { transform: none; } }
+  @keyframes intro-rise { to { opacity: 1; transform: none; } }
+  @keyframes intro-open { to { clip-path: inset(0); } }
+  @keyframes intro-settle { to { transform: none; } }
+  @media (max-width: 1100px) {
+    .intro { min-height: 0; }
+    .intro__copy, .intro__media { grid-column: 1 / -1; }
+    .intro__media img { aspect-ratio: 16 / 11; }
+  }
+</style>
+
+<script>
+  import '../scripts/site';
+</script>

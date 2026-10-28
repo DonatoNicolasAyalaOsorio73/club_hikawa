@@ -1,0 +1,45 @@
+---
+// Simplified, animation-ready redraw of the Hikawa badge (the official artwork is the PNG in /assets).
+// Built only from circles, lines, two roof curves and text on arcs, so each piece can draw itself in.
+// Every stroked shape uses pathLength="1": its dash animation is the same no matter its real length.
+const RED = '#B3262E';
+interface Props { class?: string; title?: string }
+const { class: cls, title } = Astro.props;
+const upperPosts = [382, 432, 472, 552, 592, 642];
+const lowerPosts = [332, 372, 422, 472, 552, 602, 652, 692];
+---
+<svg class:list={['logo', cls]} viewBox="0 0 1024 1024" role={title ? 'img' : undefined} aria-hidden={title ? undefined : 'true'} aria-label={title}>
+  <defs>
+    <path id="logo-arc-top" d="M 140 512 A 372 372 0 0 1 884 512" />
+    <path id="logo-arc-bottom" d="M 94 512 A 418 418 0 0 0 930 512" />
+  </defs>
+
+  <circle class="logo__plate" cx="512" cy="512" r="494" fill="#fff" />
+  <circle class="logo__ring draw" cx="512" cy="512" r="483" fill="none" stroke={RED} stroke-width="22" pathLength="1" transform="rotate(-90 512 512)" />
+
+  <circle class="logo__disc" cx="512" cy="500" r="285" fill={RED} />
+  <path class="logo__brush draw" d="M 205 330 A 345 345 0 0 0 205 670" fill="none" stroke={RED} stroke-width="9" stroke-linecap="round" pathLength="1" />
+  <path class="logo__brush draw" d="M 819 330 A 345 345 0 0 1 819 670" fill="none" stroke={RED} stroke-width="9" stroke-linecap="round" pathLength="1" />
+
+  <g class="logo__pagoda" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle class="logo__fin" cx="395" cy="298" r="9" fill="#fff" stroke="none" />
+    <circle class="logo__fin" cx="630" cy="298" r="9" fill="#fff" stroke="none" />
+    <path class="logo__roof draw" fill="#fff" style="--k:0" pathLength="1" d="M 236 350 C 330 365 370 330 395 305 L 630 305 C 655 330 695 365 790 350 C 700 382 325 382 236 350 Z" />
+    <rect class="draw" style="--k:1" pathLength="1" x="368" y="392" width="290" height="96" />
+    <line class="draw" style="--k:2" pathLength="1" x1="368" y1="428" x2="658" y2="428" />
+    <line class="draw" style="--k:2" pathLength="1" x1="368" y1="458" x2="658" y2="458" />
+    {upperPosts.map((x, i) => <line class="draw" style={`--k:${3 + i * 0.25}`} pathLength="1" x1={x} y1="392" x2={x} y2="488" />)}
+    <path class="logo__roof draw" fill="#fff" style="--k:4" pathLength="1" d="M 205 500 C 300 520 345 505 370 488 L 655 488 C 680 505 725 520 822 500 C 720 550 305 550 205 500 Z" />
+    <line class="draw" style="--k:5" pathLength="1" x1="320" y1="566" x2="704" y2="566" />
+    <line class="draw" style="--k:5" pathLength="1" x1="320" y1="604" x2="704" y2="604" />
+    {lowerPosts.map((x, i) => <line class="draw" style={`--k:${5.5 + i * 0.2}`} pathLength="1" x1={x} y1="548" x2={x} y2="700" />)}
+    <line class="draw" style="--k:7" pathLength="1" x1="270" y1="702" x2="756" y2="702" stroke-width="12" />
+  </g>
+
+  <path class="logo__ground" d="M 182 748 Q 512 708 842 748 Q 512 734 182 748 Z" fill="#0A0A0A" />
+
+  <g class="logo__type" fill="#0A0A0A" font-family="'Bebas Neue', 'Arial Narrow', sans-serif">
+    <text class="logo__top" font-size="96" letter-spacing="3" text-anchor="middle"><textPath href="#logo-arc-top" startOffset="50%">CLUB DEPORTIVO DE JUDO</textPath></text>
+    <text class="logo__bottom" font-size="124" letter-spacing="6" text-anchor="middle"><textPath href="#logo-arc-bottom" startOffset="50%">HIKAWA</textPath></text>
+  </g>
+</svg>

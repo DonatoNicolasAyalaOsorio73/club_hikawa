@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.astro/
+media-src/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+*.log
+.env
+.env.*

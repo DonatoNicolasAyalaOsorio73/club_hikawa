@@ -1,0 +1,134 @@
+---
+import { academy } from '../config/academy';
+const wa = academy.whatsappNumber.replace(/\D/g, '');
+const waReady = wa.length >= 7;
+const waHref = `https://wa.me/${wa}?text=${encodeURIComponent('Hola, quiero información para entrenar en el Club Deportivo de Judo Hikawa.')}`;
+---
+<section id="inscripcion" class="reg field f-black" aria-labelledby="inscripcion-title">
+  <div class="reg__intro">
+    <h2 id="inscripcion-title" class="head reg__title">Tu camino empieza <span class="reg__hoy">hoy.</span></h2>
+    <div id="empieza" class="reg__start">
+      <h3 class="name">Empieza en 3 pasos</h3>
+      <ol class="reg__steps">
+      <li>Déjanos tu nombre y cómo contactarte.</li>
+      <li>El club te responde por WhatsApp o email.</li>
+      <li>Coordinan tu primera clase.</li>
+      </ol>
+      <p class="small soft">Sin experiencia previa.</p>
+    </div>
+  </div>
+
+  <form class="reg__form f-white" novalidate aria-label="Formulario de inscripción" data-form
+    data-wa={wa} data-email={academy.contactEmail}>
+    <div class="fld">
+      <label for="f-name" class="fld__label">Nombre <span class="fld__req">obligatorio</span></label>
+      <input id="f-name" type="text" autocomplete="name" aria-describedby="e-name" />
+      <span id="e-name" class="err" hidden></span>
+    </div>
+
+    <fieldset class="fld">
+      <legend class="fld__label">Prefiero que me contacten por <span class="fld__req">obligatorio</span></legend>
+      <div class="seg" role="radiogroup" aria-label="Método de contacto">
+        <button type="button" role="radio" aria-checked="true" data-method="whatsapp">WHATSAPP</button>
+        <button type="button" role="radio" aria-checked="false" data-method="email" tabindex="-1">EMAIL</button>
+      </div>
+      <label for="f-contact" class="fld__hint" data-contact-label>Tu número de WhatsApp</label>
+      <input id="f-contact" type="tel" inputmode="tel" autocomplete="tel" placeholder="+57 300 000 0000" aria-describedby="e-contact" />
+      <span id="e-contact" class="err" hidden></span>
+    </fieldset>
+
+    <div class="fld">
+      <label for="f-program" class="fld__label">Programa <span class="fld__req">obligatorio</span></label>
+      <select id="f-program" aria-describedby="e-program">
+        <option value="">Selecciona un programa</option>
+        <option value="Infantil">Infantil</option>
+        <option value="Juvenil">Juvenil</option>
+        <option value="Adultos">Adultos</option>
+        <option value="Competición">Competición</option>
+        <option value="Aún no lo sé">Aún no lo sé</option>
+      </select>
+      <span id="e-program" class="err" hidden></span>
+    </div>
+
+    <div class="fld">
+      <label for="f-msg" class="fld__label">Mensaje <span class="fld__opt">(opcional)</span></label>
+      <textarea id="f-msg" rows="3"></textarea>
+    </div>
+
+    <div class="fld" data-guardian hidden>
+      <label class="check">
+        <input type="checkbox" id="f-guardian" aria-describedby="e-guardian" />
+        <span>Soy madre, padre o tutor legal y hago esta solicitud en nombre de un menor. <span class="fld__req">obligatorio</span></span>
+      </label>
+      <span id="e-guardian" class="err err--check" hidden></span>
+    </div>
+
+    <div class="fld">
+      <label class="check">
+        <input type="checkbox" id="f-consent" aria-describedby="e-consent" />
+        <span>Acepto que el club use estos datos solo para responder a mi solicitud. <a href="#privacidad">Política de privacidad</a>. <span class="fld__req">obligatorio</span></span>
+      </label>
+      <span id="e-consent" class="err err--check" hidden></span>
+    </div>
+
+    <button type="submit" class="btn btn--red btn--lg reg__submit" data-magnetic>QUIERO ENTRENAR <span class="arrow" aria-hidden="true">→</span></button>
+
+    {waReady ? (
+      <a class="btn btn--ink reg__wa" href={waHref} target="_blank" rel="noopener">O ESCRÍBENOS POR WHATSAPP</a>
+    ) : (
+      <button type="button" class="reg__wa reg__wa--off" disabled aria-disabled="true">O ESCRÍBENOS POR WHATSAPP<span>[NÚMERO DE WHATSAPP POR CONFIGURAR]</span></button>
+    )}
+
+    <div aria-live="polite" data-result></div>
+  </form>
+</section>
+
+<style>
+  .reg { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 48px; align-items: start; }
+  .reg__intro { grid-column: 1 / span 5; display: flex; flex-direction: column; gap: 40px; position: sticky; top: calc(var(--header-h) + 32px); }
+  .reg__title { font-size: clamp(64px, 7.6vw, 128px); line-height: 0.86; }
+  .reg__hoy { color: var(--red); }
+  .reg__start { display: flex; flex-direction: column; gap: 14px; max-width: 440px; scroll-margin-top: 96px; }
+  .reg__steps { counter-reset: s; display: flex; flex-direction: column; gap: 4px; }
+  .reg__steps li { counter-increment: s; display: flex; gap: 18px; align-items: baseline; padding: 16px 18px; background: var(--graphite); }
+  .reg__steps li::before { content: counter(s); font-family: var(--font-display); font-size: 28px; line-height: 1; color: var(--red); }
+
+  .reg__form { grid-column: 7 / span 6; padding: clamp(22px, 4vw, 48px); display: flex; flex-direction: column; gap: 22px; color: var(--black); }
+  .fld { display: flex; flex-direction: column; gap: 8px; border: 0; margin: 0; padding: 0; min-width: 0; }
+  .fld legend { padding: 0; margin-bottom: 8px; }
+  .fld__label { font-size: 16px; font-weight: 650; }
+  .fld__hint { font-size: var(--step-small); color: var(--soft-on-light); margin-top: 4px; }
+  .fld__opt { color: var(--soft-on-light); font-weight: 500; }
+  .fld__req { display: inline-block; margin-left: 6px; font-size: var(--step-small); font-weight: 600; color: var(--error); }
+  .fld input[type='text'], .fld input[type='tel'], .fld input[type='email'], .fld select, .fld textarea {
+    min-height: 54px; padding: 0 16px; background: #FFFFFF; color: var(--black); border: 1px solid #8A8E94; border-radius: 0; font-size: 16px; outline: none;
+    transition: border-color var(--t-hover) ease, outline-color var(--t-hover) ease;
+  }
+  .fld textarea { padding: 14px 16px; resize: vertical; }
+  .fld input:focus, .fld select:focus, .fld textarea:focus { border-color: var(--black); outline: 1px solid var(--black); outline-offset: -2px; }
+  .fld [aria-invalid='true'] { border-color: var(--red) !important; }
+  .err { font-size: var(--step-small); font-weight: 500; color: var(--error); }
+  .err--check { padding-left: 34px; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--tone-light); padding: 4px; gap: 4px; }
+  .seg button { min-height: 46px; border: 0; background: transparent; color: var(--black); font-weight: 650; font-size: 15px; letter-spacing: 0.04em; transition: background-color var(--t-hover) ease, color var(--t-hover) ease; }
+  .seg button[aria-checked='true'] { background: var(--black); color: var(--white); }
+  .check { display: flex; gap: 14px; align-items: flex-start; font-size: 16px; line-height: 1.5; color: #2A2A2A; cursor: pointer; }
+  .check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--red); flex: none; }
+  .check a { text-decoration: underline; text-underline-offset: 0.2em; }
+  .reg__submit { justify-content: space-between; min-height: 60px; }
+  .reg__wa { justify-content: center; }
+  .reg__wa--off { display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 56px; padding: 8px 20px; border: 1px dashed #8A8E94; background: transparent; color: var(--soft-on-light); font-weight: 650; font-size: 15px; cursor: not-allowed; } /* taste-skill-ignore: pending marker */
+  .reg__wa--off span { font-size: var(--step-small); font-weight: 500; }
+  :global(.reg__result) { padding: 18px 20px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px; }
+  :global(.reg__result strong) { font-weight: 750; font-size: 16px; letter-spacing: 0.06em; }
+  :global(.reg__result.is-warn strong) { color: var(--error); }
+  :global(.reg__result pre) { margin: 0; white-space: pre-wrap; font-family: var(--font-text); font-size: 15px; line-height: 1.6; color: var(--soft-on-light); background: var(--tone-light); padding: 12px; }
+  :global(.reg__result a) { align-self: flex-start; font-weight: 650; text-decoration: underline; }
+  @media (max-width: 1100px) { .reg__intro, .reg__form { grid-column: 1 / -1; } .reg__intro { position: static; } }
+</style>
+
+<script>
+  import { initForm } from '../scripts/form';
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+  if (form) initForm(form);
+</script>

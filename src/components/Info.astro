@@ -1,0 +1,58 @@
+---
+import { academy } from '../config/academy';
+import Schedule from './Schedule.astro';
+const wa = academy.whatsappNumber.replace(/\D/g, '');
+const facts = [
+  { label: 'Lugar', value: [academy.address, academy.city].filter(Boolean).join(', '), pending: '[DIRECCIÓN DEL DOJO]' },
+  { label: 'Primera clase', value: academy.firstClass, pending: '[GRATIS / PRECIO: POR CONFIRMAR]' },
+  { label: 'Qué llevar', value: academy.whatToBring, pending: '[POR CONFIRMAR CON EL CLUB]' },
+  { label: 'Edades', value: '', pending: '[POR PROGRAMA: POR CONFIRMAR]' },
+];
+---
+<section id="informacion" class="info field f-graphite" aria-labelledby="informacion-title">
+  <div class="info__head">
+    <h2 id="informacion-title" class="head">Información práctica</h2>
+    <p class="lead">Lo que necesitas saber antes de tu primera clase. Lo que el club aún no ha confirmado aparece marcado.</p>
+  </div>
+
+  <dl class="info__facts">
+    {facts.map((f) => (
+      <div class="info__fact">
+        <dt class="name">{f.label}</dt>
+        <dd>{f.value || <span class="pending">{f.pending}</span>}</dd>
+      </div>
+    ))}
+    <div class="info__fact info__fact--contact">
+      <dt class="name">Contacto</dt>
+      <dd>
+        {wa ? <a class="text-link" href={`https://wa.me/${wa}`} target="_blank" rel="noopener">WhatsApp {academy.whatsappNumber}</a> : <span class="pending">[WhatsApp]</span>}
+        {academy.contactEmail ? <a class="text-link" href={`mailto:${academy.contactEmail}`}>{academy.contactEmail}</a> : <span class="pending">[Email]</span>}
+        <a class="btn btn--paper info__cta" href="#inscripcion">Ir al formulario <span class="arrow" aria-hidden="true">→</span></a>
+      </dd>
+    </div>
+  </dl>
+
+  <Schedule />
+</section>
+
+<style>
+  .info { display: flex; flex-direction: column; gap: clamp(56px, 7vw, 104px); }
+  .info__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 20px; align-items: end; }
+  .info__head .head { grid-column: 1 / span 6; }
+  .info__head .lead { grid-column: 8 / span 5; max-width: 34ch; }
+  /* Fact tiles: a gutterless mosaic, one tone step above the field. */
+  .info__facts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+  .info__fact { display: flex; flex-direction: column; gap: 12px; padding: clamp(20px, 2.4vw, 32px); background: var(--tone-dark); min-height: 180px; grid-column: span 2; }
+  .info__fact:nth-child(4) { grid-column: span 2; }
+  .info__fact--contact { grid-column: span 4; background: var(--black); }
+  .info__fact dt { font-size: var(--step-lead); }
+  .info__fact dd { margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .info__cta { margin-top: auto; }
+  @media (max-width: 1100px) {
+    .info__head .head, .info__head .lead { grid-column: 1 / -1; }
+    .info__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .info__fact, .info__fact:nth-child(4) { grid-column: span 1; min-height: 0; }
+    .info__fact--contact { grid-column: 1 / -1; }
+  }
+  @media (max-width: 560px) { .info__facts { grid-template-columns: 1fr; } .info__fact { grid-column: 1 / -1 !important; } }
+</style>

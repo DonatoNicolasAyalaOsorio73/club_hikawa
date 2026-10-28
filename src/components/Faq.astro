@@ -1,0 +1,65 @@
+---
+import { academy } from '../config/academy';
+const anySchedule = academy.programs.some((p) => Object.keys(p.schedule).length > 0);
+const place = [academy.address, academy.city].filter(Boolean).join(', ');
+// Answers come only from the club's own copy or from academy.ts. When a fact is not provided yet,
+// the answer says so and points to the practical information instead of inventing one.
+const faqs: { id: string; q: string; a?: string; list?: string[]; pending?: boolean }[] = [
+  { id: 'experiencia', q: '¿Puedo empezar sin experiencia?', a: 'Sí. No se necesita experiencia previa.' },
+  { id: 'programa', q: '¿Qué programa me corresponde?', list: academy.programs.map((p) => `${p.name}: ${p.focus}`), a: 'Si no lo tienes claro, elige «Aún no lo sé» en el formulario y el club te orienta.' },
+  { id: 'inscripcion', q: '¿Cómo me inscribo?', list: ['Déjanos tu nombre y cómo contactarte.', 'El club te responde por WhatsApp o email.', 'Coordinan tu primera clase.'] },
+  { id: 'precio', q: '¿Cuánto cuesta?', a: academy.firstClass ? `Primera clase: ${academy.firstClass}.` : undefined, pending: !academy.firstClass },
+  { id: 'lugar', q: '¿Dónde está el dojo?', a: place || undefined, pending: !place },
+  { id: 'horarios', q: '¿Cuáles son los horarios?', a: anySchedule ? 'Consulta la tabla de horarios por grupo.' : undefined, pending: !anySchedule },
+  { id: 'llevar', q: '¿Qué llevo a la primera clase?', a: academy.whatToBring || undefined, pending: !academy.whatToBring },
+];
+---
+<section id="preguntas" class="faq field f-white" aria-labelledby="preguntas-title">
+  <div class="faq__aside">
+    <h2 id="preguntas-title" class="head">Preguntas frecuentes</h2>
+    <p class="soft">¿No encuentras tu respuesta? Escríbela en el mensaje del formulario.</p>
+  </div>
+  <div class="faq__list">
+    {faqs.map((f, i) => (
+      <details id={`faq-${f.id}`} class="faq__item" open={i === 0}>
+        <summary class="faq__q">
+          <span>{f.q}</span>
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M5 12h14M12 5v14" fill="none" stroke="currentColor" stroke-width="2.5" /></svg>
+        </summary>
+        <div class="faq__a">
+          {f.list && <ol class="faq__ol">{f.list.map((l) => <li>{l}</li>)}</ol>}
+          {f.a && <p>{f.a}</p>}
+          {f.pending && (
+            <p><span class="pending">Pendiente de confirmar por el club</span> <a class="text-link" href="#informacion">Ver información práctica</a></p>
+          )}
+        </div>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .faq { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 40px; align-items: start; }
+  .faq__aside { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: 20px; position: sticky; top: calc(var(--header-h) + 32px); }
+  .faq__list { grid-column: 6 / span 7; display: flex; flex-direction: column; gap: 4px; }
+  .faq__item { background: var(--tone-light); transition: background-color 280ms ease, color 280ms ease; }
+  /* Smooth open and close: the answer grows from 0 to its own height. */
+  .faq__item::details-content { block-size: 0; overflow: clip; transition: block-size 340ms cubic-bezier(0.23, 1, 0.32, 1), content-visibility 340ms allow-discrete; }
+  .faq__item[open]::details-content { block-size: auto; }
+  .faq__q { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 20px; min-height: 64px; padding: 18px 22px; cursor: pointer; font-size: var(--step-lead); font-weight: 650; letter-spacing: -0.01em; }
+  .faq__q::-webkit-details-marker { display: none; }
+  .faq__q svg { flex: none; transition: transform var(--t-ui) var(--ease-out); }
+  .faq__item[open] .faq__q svg { transform: rotate(45deg); }
+  .faq__item[open] { background: var(--black); color: var(--white); }
+  .faq__item[open] .pending { color: var(--soft-on-dark); }
+  .faq__item[open] .text-link { color: var(--white); }
+  .faq__a { display: flex; flex-direction: column; gap: 12px; padding: 0 22px 24px; max-width: 60ch; }
+  .faq__ol { counter-reset: f; display: flex; flex-direction: column; gap: 8px; }
+  .faq__ol li { counter-increment: f; display: flex; gap: 12px; }
+  .faq__ol li::before { content: counter(f); font-family: var(--font-display); font-size: 24px; line-height: 1; color: var(--red); min-width: 1ch; }
+  @media (hover: hover) and (pointer: fine) { .faq__item:not([open]) .faq__q:hover { background: #DCDDE0; } }
+  @media (max-width: 1100px) {
+    .faq__aside { grid-column: 1 / -1; position: static; }
+    .faq__list { grid-column: 1 / -1; }
+  }
+</style>

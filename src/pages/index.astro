@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import HeroSequence from '../components/HeroSequence.astro';
+import Programs from '../components/Programs.astro';
+import Info from '../components/Info.astro';
+import Faq from '../components/Faq.astro';
+import Join from '../components/Join.astro';
+import Registration from '../components/Registration.astro';
+import Footer from '../components/Footer.astro';
+import Loader from '../components/Loader.astro';
+---
+<Base>
+  <!-- Sections that moved to /el-judo/ keep their old links working. -->
+  <script is:inline slot="head">
+    (function () {
+      var moved = ['valores', 'tecnicas', 'rendimiento', 'calendario', 'grados', 'sensei'];
+      // On load, and on a same-page hash change (an old link followed while already on the home page).
+      var check = function () {
+        var id = location.hash.slice(1);
+        if (moved.indexOf(id) !== -1) location.replace('/el-judo/#' + id);
+      };
+      check();
+      window.addEventListener('hashchange', check);
+
+      // Intro loader: plays on every reload and every arrival from outside the site. It is skipped
+      // when moving back here from our own pages (link or back button), on links to a section and
+      // under reduced motion. Decided here, before first paint, so nothing flashes either way.
+      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      var type = nav ? nav.type : 'navigate';
+      var internal = false;
+      try { internal = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
+      var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var play = type === 'reload' || (type === 'navigate' && !internal);
+      if (play && !reduce && !location.hash) document.documentElement.classList.add('is-loading');
+    })();
+  </script>
+  <Loader />
+  <Header />
+  <main>
+    <HeroSequence />
+    <Programs />
+    <Info />
+    <Faq />
+    <Join />
+    <Registration />
+  </main>
+  <Footer />
+</Base>
+
+<style is:global>
+  /* The programs chapter slides over the held last frame of the throw. */
+  .seq.is-scrub ~ .prog { margin-top: -100vh; margin-top: -100lvh; } /* exactly one held stage: see HeroSequence */
+</style>
+
+<script>
+  import '../scripts/site';
+</script>

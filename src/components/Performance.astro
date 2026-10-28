@@ -1,0 +1,135 @@
+---
+import { pillars, levels } from '../config/academy';
+const shades = ['#3A070B', '#7A1018', '#B0141B', '#E31B23'];
+const season = [
+  { name: 'GENERAL', text: 'Base aeróbica, fuerza y movilidad.', flex: 3, tone: 'f-black' },
+  { name: 'ESPECÍFICA', text: 'Potencia, uchi-komi y randori.', flex: 3, tone: 'f-graphite' },
+  { name: 'COMPETITIVA', text: 'Puesta a punto y estrategia.', flex: 4, tone: 'f-red' },
+  { name: 'TRANSICIÓN', text: 'Recuperación activa.', flex: 1.4, tone: 'perf__deep' },
+];
+---
+<section id="rendimiento" class="perf field f-white" aria-labelledby="rendimiento-title">
+  <div class="perf__intro">
+    <h2 id="rendimiento-title" class="head">Preparación física con criterio de alto rendimiento.</h2>
+    <div class="perf__copy">
+      <p>El judo exige fuerza de agarre, explosividad y la capacidad de repetir esfuerzos máximos durante un combate de cuatro minutos. La preparación se planifica según la etapa de cada judoka.</p>
+      <ul class="perf__pillars">
+        {pillars.map((p) => (
+          <li><h3 class="name">{p.name}</h3><p class="small soft">{p.text}</p></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="perf__block">
+    <h3 class="perf__h">Metodología por niveles</h3>
+    <div class="perf__acc" data-acc>
+      {levels.map((l, i) => (
+        <div class:list={['perf__panel', { 'is-open': i === 0 }]} style={`background:${shades[i]}`}>
+          <button type="button" class="perf__tab" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`lvl-${l.n}`}>
+            <span class="display perf__n">{l.n}</span><span class="perf__tname">{l.name}</span>
+          </button>
+          <div class="perf__body" id={`lvl-${l.n}`}>
+            <h4 class="display perf__open-name">{l.name}</h4>
+            <p>{l.text}</p>
+            <div class="perf__int" role="img" aria-label={`Intensidad ${l.w}%`}><span style={`transform:scaleX(${l.w / 100})`}></span></div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <span class="pending perf__validate">[VALIDAR CON EL CUERPO TÉCNICO DEL CLUB]</span>
+  </div>
+
+  <div class="perf__block">
+    <h3 class="perf__h">Planificación de la temporada</h3>
+    <div class="perf__season">
+      {season.map((s) => (
+        <div class:list={['perf__phase', s.tone]} style={`flex:${s.flex} 1 140px`}>
+          <span class="name">{s.name}</span>
+          <span class="small">{s.text}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div id="calendario" class="perf__block">
+    <h3 class="perf__h">Calendario competitivo</h3>
+    <p class="soft">Se publica cuando el club confirma su participación.</p>
+    <ul class="perf__cal">
+      {[1, 2, 3].map(() => (
+        <li>
+          <span class="pending">[Fecha]</span>
+          <span class="pending">[Evento: nombre oficial]</span>
+          <span class="pending">[Ciudad · País]</span>
+          <span class="pending">[Categorías del club]</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .perf { display: flex; flex-direction: column; gap: clamp(64px, 8vw, 120px); }
+  .perf__intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 32px; }
+  .perf__intro .head { grid-column: 1 / -1; font-size: clamp(32px, 6.4vw, 96px); }
+  .perf__copy { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; row-gap: 28px; }
+  .perf__copy > p { grid-column: 1 / span 5; }
+  .perf__pillars { grid-column: 7 / span 6; }
+  .perf__pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 20px var(--gutter); }
+  .perf__pillars li { display: flex; flex-direction: column; gap: 4px; }
+  .perf__block { display: flex; flex-direction: column; gap: 20px; }
+  .perf__h { font-size: var(--step-lead); font-weight: 650; letter-spacing: -0.01em; }
+
+  /* Accordion of tinted panels: dark to light across one hue. */
+  .perf__acc { display: flex; height: clamp(420px, 34vw, 520px); color: var(--on-red); }
+  .perf__panel { position: relative; display: flex; flex: 0 0 auto; flex-basis: 96px; overflow: clip; transition: flex-basis 450ms var(--ease-in-out); }
+  .perf__panel.is-open { flex: 1 1 auto; }
+  .perf__tab { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; padding: 22px 0 22px 22px; border: 0; background: none; color: inherit; text-align: left; }
+  .perf__panel.is-open .perf__tab { inset: 0 auto auto 0; padding: 22px; }
+  .perf__n { font-size: 56px; line-height: 1; }
+  .perf__tname { font-weight: 700; writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: 0.06em; }
+  .perf__panel.is-open .perf__tname { display: none; }
+  .perf__body { position: absolute; inset: auto 0 0 0; padding: 28px; display: flex; flex-direction: column; gap: 14px; max-width: 48ch; opacity: 0; visibility: hidden; transition: opacity 240ms ease, visibility 0s linear 240ms; pointer-events: none; }
+  .perf__panel.is-open .perf__body { opacity: 1; visibility: visible; transition: opacity 240ms ease 220ms, visibility 0s; pointer-events: auto; }
+  .perf__open-name { font-size: clamp(44px, 4vw, 72px); }
+  .perf__int { height: 6px; background: rgba(255, 255, 255, 0.25); width: min(320px, 100%); }
+  .perf__int span { display: block; height: 100%; background: var(--white); transform-origin: 0 50%; }
+  .perf__validate { align-self: flex-start; }
+
+  .perf__season { display: flex; flex-wrap: wrap; gap: 0; }
+  .perf__phase { display: flex; flex-direction: column; gap: 6px; padding: 20px; min-height: 120px; }
+  .perf__deep { background: var(--red-deep); color: var(--white); }
+  .perf__cal { display: flex; flex-direction: column; gap: 6px; }
+  .perf__cal li { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 10px 24px; padding: 18px 20px; background: var(--tone-light); align-items: center; }
+  .perf__cal .pending { justify-self: start; }
+
+  @media (max-width: 1100px) {
+    .perf__copy > p, .perf__pillars { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    .perf__pillars { grid-template-columns: 1fr; }
+    .perf__acc { flex-direction: column; height: auto; }
+    .perf__panel { flex-basis: auto; min-height: 72px; }
+    .perf__panel.is-open { min-height: 0; }
+    .perf__tab { position: relative; inset: auto; flex-direction: row; align-items: center; gap: 16px; padding: 14px 20px; width: 100%; }
+    .perf__panel.is-open .perf__tab { position: relative; }
+    .perf__tname { writing-mode: horizontal-tb; transform: none; }
+    .perf__panel.is-open .perf__tname { display: inline; }
+    .perf__n { font-size: 40px; }
+    /* Phone: the open level grows to its own height instead of popping in. */
+    .perf__body { position: relative; inset: auto; padding: 0 20px; height: 0; overflow: clip; transition: height 340ms cubic-bezier(0.23, 1, 0.32, 1), padding-bottom 340ms cubic-bezier(0.23, 1, 0.32, 1), opacity 240ms ease, visibility 0s linear 340ms; }
+    .perf__panel { flex-direction: column; }
+    .perf__panel.is-open .perf__body { height: auto; padding-bottom: 22px; transition: height 340ms cubic-bezier(0.23, 1, 0.32, 1), padding-bottom 340ms cubic-bezier(0.23, 1, 0.32, 1), opacity 240ms ease 80ms, visibility 0s; }
+    .perf__open-name { display: none; }
+  }
+</style>
+
+<script>
+  const acc = document.querySelector<HTMLElement>('[data-acc]');
+  if (acc) {
+    const panels = [...acc.querySelectorAll<HTMLElement>('.perf__panel')];
+    panels.forEach((p) => p.querySelector('button')!.addEventListener('click', () => {
+      panels.forEach((q) => { const on = q === p; q.classList.toggle('is-open', on); q.querySelector('button')!.setAttribute('aria-expanded', String(on)); });
+    }));
+  }
+</script>

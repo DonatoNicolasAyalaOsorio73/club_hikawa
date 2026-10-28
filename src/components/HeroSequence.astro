@@ -1,0 +1,144 @@
+---
+import { academy, sequence } from '../config/academy';
+const pad = (n: number) => String(n).padStart(3, '0');
+---
+<section id="inicio" class="seq" data-seq aria-labelledby="hero-title"
+  data-desktop={JSON.stringify(sequence.desktop)} data-mobile={JSON.stringify(sequence.mobile)}
+  data-camera={JSON.stringify(sequence.camera)}>
+  <span id="judo" class="seq__judo" tabindex="-1"></span>
+  <div class="seq__stage">
+    <div class="seq__media">
+      <picture>
+        <source media="(max-width: 1100px)" srcset={`${sequence.mobile.path}001.webp`} width="540" height="960" />
+        <img class="seq__poster" src={`${sequence.desktop.path}001.webp`} alt="" width="1440" height="2560" fetchpriority="high" decoding="async" />
+      </picture>
+      <canvas class="seq__canvas" role="img" aria-label="El arte del judo: lanzamiento real controlado con el scroll"></canvas>
+      <div class="seq__scrim" aria-hidden="true"></div>
+      <a class="seq__credit small" href={academy.footage.page} target="_blank" rel="noopener">{academy.footage.credit} ↗</a>
+    </div>
+
+    <div class="seq__copy">
+      <div class="seq__hero" data-hero>
+        <h1 id="hero-title" class="display seq__title">
+          <span class="line"><span data-line style="--i:0">Domina el</span></span>
+          <span class="line"><span data-line style="--i:1">movimiento<span class="seq__dot">.</span></span></span>
+        </h1>
+        <p class="lead seq__lead" data-load style="--d:420ms">Club Deportivo de Judo Hikawa. Disciplina, técnica y carácter.</p>
+        <div class="seq__ctas" data-load style="--d:520ms">
+          <a class="btn btn--red btn--lg" href="#inscripcion" data-magnetic data-cursor="(INSCRÍBETE)">INSCRÍBETE <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn--paper btn--lg" href="/el-judo/">DESCUBRE EL JUDO</a>
+        </div>
+      </div>
+    </div>
+
+    <ol class="seq__phases" aria-label="Fases del lanzamiento">
+      {sequence.phases.map((p) => (
+        <li class="seq__phase" data-from={p.from} data-to={p.to}>
+          <img class="seq__still" src={`${sequence.desktop.path}${pad(p.still)}.webp`} alt={`${p.name}: fotograma real del lanzamiento`} width="1440" height="2560" loading="lazy" decoding="async" />
+          <span class="seq__pname small">{p.n} / {p.name}</span>
+          <span class="display seq__pline">{p.line}</span>
+          <span class="seq__pnote">{p.note}</span>
+        </li>
+      ))}
+    </ol>
+
+    <div class="seq__end" data-end>
+      <p class="seq__end-line">Tu camino empieza en el tatami.</p>
+      <a class="btn btn--red btn--lg" href="#inscripcion">INSCRÍBETE <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="seq__hud">
+      <div class="seq__bar" aria-hidden="true"><span data-bar></span></div>
+      <div class="seq__hud-row">
+        <ol class="seq__names small" aria-hidden="true">
+          {sequence.phases.map((p) => <li data-name>{p.name}</li>)}
+        </ol>
+        <span class="seq__hint small" aria-hidden="true">Desliza para controlar</span>
+        <a class="small text-link seq__skip" href="#programas">SALTAR ↓</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .seq { position: relative; background: var(--black); color: var(--white); }
+  .seq__judo { position: absolute; left: 0; top: 0; width: 1px; height: 1px; outline: none; }
+  .seq__stage { position: relative; }
+
+  /* Static composition (no JS or reduced motion): the first frame with the title, then the six phases as stills. */
+  .seq__media { position: relative; height: 100svh; min-height: 560px; overflow: clip; background: var(--graphite); }
+  .seq__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 47% 37%; }
+  .seq__canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+  /* Neutral legibility scrim: darkest where the copy sits (bottom-left), clear over the action. */
+  .seq__scrim { position: absolute; inset: 0; pointer-events: none; background: /* taste-skill-ignore: neutral scrim */
+    linear-gradient(90deg, /* taste-skill-ignore: neutral scrim */ rgba(10,10,10,0.88) 0%, rgba(10,10,10,0.55) 34%, rgba(10,10,10,0) 62%),
+    linear-gradient(180deg, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0) 18% /* taste-skill-ignore: neutral scrim */, rgba(10,10,10,0) 62%, rgba(10,10,10,0.9) 100%); } /* taste-skill-ignore: neutral scrim over footage */
+  .seq__credit { position: absolute; right: var(--margin); top: calc(var(--header-h) + 12px); color: var(--soft-on-dark); }
+  .seq__credit:hover { color: var(--white); }
+
+  .seq__copy { position: absolute; left: var(--margin); right: var(--margin); top: 0; height: 100svh; min-height: 560px; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: clamp(32px, 7vh, 72px); pointer-events: none; }
+  .seq__hero { display: flex; flex-direction: column; gap: 24px; pointer-events: auto; max-width: 640px; }
+  .seq__title { font-size: var(--step-hero); line-height: 0.86; }
+  .seq__title .line { display: block; overflow: clip; padding: 0.06em 0 0.04em; margin: -0.06em 0 -0.04em; }
+  .seq__title [data-line] { display: block; }
+  .seq__dot { color: var(--red); }
+  .seq__lead { max-width: 28ch; }
+  .seq__ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .seq__phases { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 40px var(--gutter); padding: var(--field-pad) var(--margin); background: var(--black); }
+  .seq__phase { display: flex; flex-direction: column; gap: 10px; }
+  .seq__still { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; margin-bottom: 8px; background: var(--graphite); }
+  .seq__pname { font-weight: 650; letter-spacing: 0.04em; color: var(--soft-on-dark); }
+  .seq__pline { font-size: clamp(40px, 4.6vw, 76px); line-height: 0.92; }
+  .seq__pnote { max-width: 38ch; color: var(--ink-on-dark); }
+  @media (min-width: 1101px) { .seq.is-scrub .seq__pline { font-size: clamp(56px, 5.4vw, 96px); } .seq.is-scrub .seq__pnote { font-size: var(--step-lead); line-height: 1.4; } }
+  .seq__end, .seq__hud { display: none; }
+
+  /* Scrub mode, set by the script when motion is allowed: one held stage locked to the scrollbar. */
+  /* Phone address bars grow and shrink the screen while scrolling. The held stage always fills the
+     largest screen (lvh, so no strip ever shows below it), and everything readable stays inside the
+     smallest one (svh, so the bar never covers it). Neither unit changes as the bar moves. */
+  .seq.is-scrub { height: 500svh; --bar-gap: calc(100lvh - 100svh); } /* 300svh of scrub and one screen while the next chapter slides over */
+  .seq.is-scrub .seq__judo { top: 3%; }
+  .seq.is-scrub .seq__stage { position: sticky; top: 0; height: 100vh; height: 100lvh; overflow: clip; }
+  .seq.is-scrub .seq__media { position: absolute; inset: 0; height: auto; min-height: 0; }
+  .seq.is-scrub .seq__canvas { opacity: 1; }
+  .seq.is-scrub .seq__copy { height: 100svh; min-height: 0; padding-bottom: calc(clamp(18px, 3.5vh, 36px) + 84px); }
+  .seq.is-scrub .seq__hero { position: relative; z-index: 1; will-change: transform, opacity; }
+  .seq.is-scrub .seq__phases { position: absolute; left: var(--margin); right: var(--margin); bottom: calc(clamp(18px, 3.5vh, 36px) + 84px + var(--bar-gap, 0px)); height: 0; padding: 0; background: none; display: block; }
+  .seq.is-scrub .seq__phase { position: absolute; left: 0; right: 0; bottom: 0; opacity: 0; visibility: hidden; max-width: 560px; }
+  .seq.is-scrub .seq__still { display: none; }
+  .seq.is-scrub .seq__end { display: flex; position: absolute; left: var(--margin); right: var(--margin); bottom: calc(clamp(18px, 3.5vh, 36px) + 84px + var(--bar-gap, 0px)); flex-direction: column; align-items: flex-start; gap: 20px; opacity: 0; visibility: hidden; }
+  .seq__end-line { font-family: var(--font-display); font-size: var(--step-head); line-height: 0.9; max-width: 11ch; }
+  .seq.is-scrub .seq__hud { display: flex; flex-direction: column; gap: 14px; position: absolute; left: var(--margin); right: var(--margin); bottom: calc(clamp(18px, 3.5vh, 36px) + var(--bar-gap, 0px)); }
+  .seq__bar { position: relative; height: 3px; background: rgba(245, 245, 245, 0.18); }
+  .seq__bar span { position: absolute; inset: 0; background: var(--red); transform-origin: 0 50%; transform: scaleX(0); }
+  .seq__hud-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; }
+  .seq__names { display: flex; gap: clamp(12px, 2.2vw, 32px); color: #8A8E94; font-weight: 600; letter-spacing: 0.04em; }
+  .seq__names li { transition: color 300ms ease; }
+  .seq__names li.is-done { color: var(--steel); }
+  .seq__names li.is-on { color: var(--white); }
+  .seq__hint { display: none; color: var(--soft-on-dark); }
+  .seq__skip { display: inline-flex; align-items: center; min-height: 44px; font-weight: 650; pointer-events: auto; }
+
+  @media (max-width: 1100px) {
+    .seq.is-scrub { height: 430svh; }
+    .seq__names { display: none; }
+    .seq__hint { display: inline; }
+    .seq__scrim { background: linear-gradient(180deg, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0.1) 18%, rgba(10,10,10,0.5) 40%, rgba(10,10,10,0.94) 70%, rgba(10,10,10,0.96) 100%); } /* taste-skill-ignore: neutral scrim */
+  }
+
+  /* Load sequence: the headline is painted on the first frame and settles within 1.2 s. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .seq__title [data-line] { transform: translateY(105%); animation: load-line 800ms var(--ease-expo) forwards; animation-delay: calc(100ms + var(--i) * 90ms); }
+    :global(.js) .seq [data-load] { opacity: 0; transform: translateY(12px); animation: load-rise 500ms var(--ease-out) forwards; animation-delay: var(--d); }
+  }
+  @keyframes load-line { to { transform: none; } }
+  @keyframes load-rise { to { opacity: 1; transform: none; } }
+</style>
+
+<script>
+  import { initSequence } from '../scripts/sequence';
+  const root = document.querySelector<HTMLElement>('[data-seq]');
+  if (root) initSequence(root);
+</script>

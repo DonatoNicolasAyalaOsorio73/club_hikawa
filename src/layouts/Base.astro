@@ -1,0 +1,39 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  heroPreload?: boolean;
+}
+const {
+  title = 'Club Deportivo de Judo Hikawa · Judo, técnica y carácter',
+  description = 'Club Deportivo de Judo Hikawa. Programas Infantil, Juvenil, Adultos y Competición. Inscríbete y entrena con propósito.',
+  ogTitle = 'Club Deportivo de Judo Hikawa',
+  ogDescription = 'Entrena con propósito. Desarrolla tu técnica y encuentra tu propio camino.',
+  heroPreload = true,
+} = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:image" content="assets/hikawa-logo.png" />
+    <meta name="theme-color" content="#0A0A0A" />
+    <link rel="icon" type="image/webp" href="/assets/hikawa-logo-88.webp" />
+    {heroPreload && <link rel="preload" as="image" href="/frames/d/f001.webp" media="(min-width: 1101px)" fetchpriority="high" />}
+    {heroPreload && <link rel="preload" as="image" href="/frames/m/f001.webp" media="(max-width: 1100px)" fetchpriority="high" />}
+    <slot name="head" />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

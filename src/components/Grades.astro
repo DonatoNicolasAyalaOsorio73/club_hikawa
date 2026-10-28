@@ -1,0 +1,88 @@
+---
+import { belts } from '../config/academy';
+---
+<section id="grados" class="grd field f-black" aria-labelledby="grados-title" data-belts>
+  <div class="grd__head">
+    <h2 id="grados-title" class="head">Del cinturón blanco al negro.</h2>
+    <p class="lead">Cada grado reconoce técnica, conocimiento y actitud. Selecciona un cinturón para ver qué implica.</p>
+  </div>
+
+  <div class="grd__detail" aria-live="polite">
+    <div class="grd__id">
+      <h3 class="display grd__h" data-belt-grade>{belts[0].grade}</h3>
+      <p class="lead">Cinturón <span data-belt-name>{belts[0].name}</span></p>
+      <p class="small soft" data-belt-stage>{belts[0].stage}</p>
+    </div>
+    <dl class="grd__dl">
+      <div><dt class="name">Contenido</dt><dd><span class="pending">[Técnicas exigidas para este grado, según el programa del club]</span></dd></div>
+      <div><dt class="name">Tiempo mínimo</dt><dd><span class="pending">[Por confirmar]</span></dd></div>
+      <div><dt class="name">Examen</dt><dd><span class="pending">[Requisitos según el reglamento de grados de la federación]</span></dd></div>
+    </dl>
+  </div>
+
+  <fieldset class="grd__band">
+    <legend class="sr-only">Cinturones</legend>
+    {belts.map((b, i) => (
+      <label class="grd__seg">
+        <input type="radio" name="belt" value={i} checked={i === 0} class="sr-only" />
+        {b.bg.startsWith('repeating')
+          ? <span class="grd__color grd__stripes">{Array.from({ length: 6 }, (_, k) => <span style={`background:${k % 2 ? '#F5F5F5' : '#E31B23'}`}></span>)}</span>
+          : <span class="grd__color" style={`background:${b.bg}`}></span>}
+        <span class="grd__grade">{b.name}<span class="sr-only">, {b.grade}</span></span>
+      </label>
+    ))}
+  </fieldset>
+  <p class="small soft grd__note">Colores kyu de uso habitual en clubes; pueden variar según la federación. Grados dan según el sistema Kodokan.</p>
+  <script type="application/json" data-belts-json set:html={JSON.stringify(belts)}></script>
+</section>
+
+<style>
+  .grd { display: flex; flex-direction: column; gap: clamp(40px, 5vw, 72px); }
+  .grd__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 20px; align-items: end; }
+  .grd__head .head { grid-column: 1 / span 6; }
+  .grd__head .lead { grid-column: 8 / span 5; max-width: 34ch; }
+
+  .grd__band { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 0; }
+  .grd__seg { display: flex; flex-direction: column; gap: 14px; cursor: pointer; }
+  .grd__color { display: block; height: clamp(88px, 10vw, 140px); outline: 1px solid rgba(245, 245, 245, 0.35); outline-offset: -1px; transition: transform var(--t-ui) var(--ease-out); transform-origin: 50% 100%; }
+  .grd__stripes { display: flex; }
+  .grd__stripes span { flex: 1; }
+  .grd__grade { font-size: var(--step-small); font-weight: 650; color: var(--soft-on-dark); transition: color var(--t-hover) ease; padding-right: 6px; }
+  .grd__seg:has(input:checked) .grd__color { transform: scaleY(1.35); }
+  .grd__seg:has(input:checked) .grd__grade { color: var(--white); text-decoration: underline; text-decoration-color: var(--red); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+  .grd__seg:has(input:focus-visible) .grd__color { outline: 2px solid var(--red); outline-offset: 4px; }
+  @media (hover: hover) and (pointer: fine) { .grd__seg:hover .grd__grade { color: var(--white); } }
+
+  .grd__detail { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 28px; align-items: start; }
+  .grd__id { grid-column: 1 / span 5; display: flex; flex-direction: column; gap: 8px; }
+  @media (prefers-reduced-motion: no-preference) { .grd__id.is-swap { animation: grd-in 320ms cubic-bezier(0.23, 1, 0.32, 1); } }
+  @keyframes grd-in { from { opacity: 0; transform: translateY(8px); } }
+  .grd__h { font-size: clamp(72px, 9vw, 160px); }
+  .grd__dl { grid-column: 7 / span 6; display: flex; flex-direction: column; gap: 4px; }
+  .grd__dl div { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; padding: 18px 20px; background: var(--graphite); align-items: center; }
+  .grd__dl dd { margin: 0; }
+  .grd__note { max-width: 60ch; }
+
+  @media (max-width: 1100px) {
+    .grd__head .head, .grd__head .lead, .grd__id, .grd__dl { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    .grd__band { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 20px; }
+    .grd__color { height: 64px; }
+    .grd__dl div { grid-template-columns: 1fr; gap: 8px; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-belts]');
+  if (root) {
+    const data = JSON.parse(root.querySelector('[data-belts-json]')!.textContent!) as { grade: string; name: string; stage: string }[];
+    const set = (sel: string, v: string) => (root.querySelector(sel)!.textContent = v);
+    root.addEventListener('change', (e) => {
+      const b = data[+(e.target as HTMLInputElement).value];
+      const id = root.querySelector<HTMLElement>('.grd__id')!;
+      id.classList.remove('is-swap'); void id.offsetWidth; id.classList.add('is-swap');
+      set('[data-belt-grade]', b.grade); set('[data-belt-name]', b.name); set('[data-belt-stage]', b.stage);
+    });
+  }
+</script>

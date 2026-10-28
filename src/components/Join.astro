@@ -1,0 +1,31 @@
+---
+interface Props { id?: string }
+const { id = 'comunidad' } = Astro.props;
+---
+<section id={id} class="join f-red" aria-labelledby={`${id}-title`}>
+  <div class="join__top">
+    <div class="join__copy">
+      <h2 id={`${id}-title`} class="lead join__title">No entrenas solo.</h2>
+      <p>Cada judoka construye su propio camino. Todos comienzan dando el primer paso.</p>
+      <p class="small join__legal">Fotografías y datos publicados con autorización. En el caso de menores, con el consentimiento de su madre, padre o tutor.</p>
+    </div>
+    <svg class="join__arrow" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true"><path d="M12 36 36 12M16 12h20v20" fill="none" stroke="currentColor" stroke-width="4" /></svg>
+  </div>
+  <a class="display join__word" href="/#inscripcion">INSCRÍBETE</a>
+</section>
+
+<style>
+  .join { position: relative; min-height: 60svh; padding: clamp(28px, 3.6vw, 48px) var(--margin) 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; transition: background-color 120ms linear, color 120ms linear; }
+  .join__top { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 24px; pointer-events: none; }
+  .join__copy { display: flex; flex-direction: column; gap: 10px; max-width: 44ch; }
+  .join__title { font-weight: 650; }
+  .join__legal { opacity: 1; }
+  .join__arrow { flex: none; width: clamp(32px, 4vw, 48px); height: auto; }
+  .join__word { font-size: clamp(88px, 24.5vw, 420px); line-height: 0.78; letter-spacing: 0; white-space: nowrap; }
+  /* The whole band is the link. */
+  .join__word::after { content: ''; position: absolute; inset: 0; }
+  .join:has(.join__word:hover), .join:has(.join__word:focus-visible) { background: var(--black); color: var(--white); }
+  .join__word:focus-visible { outline: none; }
+  .join:has(.join__word:focus-visible) { outline: 3px solid var(--white); outline-offset: -8px; }
+  @media (max-width: 760px) { .join { min-height: 46svh; } .join__word { font-size: 23vw; } }
+</style>

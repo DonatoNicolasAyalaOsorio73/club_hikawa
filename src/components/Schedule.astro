@@ -1,0 +1,61 @@
+---
+import { academy, DAYS } from '../config/academy';
+const anySchedule = academy.programs.some((p) => Object.keys(p.schedule).length > 0);
+---
+<section id="horarios" class="sch" aria-labelledby="horarios-title">
+  <div class="sch__aside">
+    <h2 id="horarios-title" class="head sch__title">¿Cuándo entrenas?</h2>
+    <p class="sch__intro">Elige el grupo que te corresponde. Si no sabes cuál, marca «Aún no lo sé» en el formulario y el club te orienta.</p>
+  </div>
+  <table class="sch__table" aria-label="Horario semanal">
+    <thead>
+      <tr>
+        <th scope="col"><span class="sr-only">GRUPO</span></th>
+        {anySchedule ? DAYS.map((d) => <th scope="col">{d}</th>) : <th scope="col" colspan="6">DÍAS Y HORAS</th>}
+        <th scope="col"><span class="sr-only">Inscripción</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {academy.programs.map((p) => {
+        const has = Object.keys(p.schedule).length > 0;
+        return (
+          <tr>
+            <th scope="row">
+              <span class="display sch__group">{p.name}</span>
+              <span class="sch__ages">{p.ages || <span class="pending">[EDADES: POR CONFIRMAR]</span>}</span>
+            </th>
+            {anySchedule
+              ? (has ? DAYS.map((d) => <td data-day={d}>{p.schedule[d] ?? '·'}</td>) : <td colspan="6"><span class="pending">[POR CONFIRMAR]</span></td>)
+              : <td colspan="6"><span class="pending">[DÍAS Y HORAS: POR CONFIRMAR]</span></td>}
+            <td class="sch__act"><button type="button" class="btn btn--paper" data-pick={p.name}>INSCRIBIRME <span class="arrow" aria-hidden="true">→</span></button></td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</section>
+
+<style>
+  /* Lives inside the Información práctica chapter and takes its dark field. */
+  .sch { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 40px; align-items: start; scroll-margin-top: 96px; }
+  .sch__aside { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: 20px; }
+  .sch__title { font-size: clamp(44px, 4vw, 68px); }
+  .sch__intro { max-width: 34ch; color: var(--soft-on-dark); }
+  .sch__table { grid-column: 6 / span 7; width: 100%; border-collapse: collapse; }
+  .sch__table thead th { text-align: left; padding: 0 12px 14px 0; font-size: var(--step-small); font-weight: 650; letter-spacing: 0.04em; color: var(--soft-on-dark); border-bottom: 3px solid var(--white); }
+  .sch__table tbody th, .sch__table td { padding: 22px 12px 22px 0; border-bottom: 1px solid rgba(245, 245, 245, 0.18); text-align: left; vertical-align: middle; }
+  .sch__table tbody th { display: flex; flex-direction: column; gap: 8px; font-weight: 400; }
+  .sch__group { font-size: clamp(36px, 3vw, 52px); }
+  .sch__act { text-align: right !important; padding-right: 0 !important; }
+  @media (max-width: 1100px) {
+    .sch { display: flex; flex-direction: column; align-items: stretch; gap: 28px; }
+  }
+  @media (max-width: 760px) {
+    .sch__table thead { display: none; }
+    .sch__table, .sch__table tbody, .sch__table tr { display: block; }
+    .sch__table tr { display: grid; gap: 14px; padding: 22px 0; border-bottom: 1px solid rgba(245, 245, 245, 0.18); }
+    .sch__table tbody th, .sch__table td { display: block; border: 0; padding: 0; }
+    .sch__table td[data-day]::before { content: attr(data-day) '  '; font-weight: 650; color: var(--soft-on-dark); }
+    .sch__act { text-align: left !important; }
+  }
+</style>
